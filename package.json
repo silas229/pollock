@@ -1,0 +1,19 @@
+{
+  "name": "pollock",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab-fi.ostfalia.de/lv-ekdi-ws22/swe-gruppe32/pollock.git"
+  },
+  "keywords": [
+    "ostfalia",
+    "webprogrammierung"
+  ],
+  "author": "",
+  "license": "ISC"
+}
