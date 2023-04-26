@@ -2,9 +2,11 @@
   "name": "pollock",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "repository": {
     "type": "git",
@@ -15,5 +17,13 @@
     "webprogrammierung"
   ],
   "author": "",
-  "license": "ISC"
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.23",
+    "tailwindcss": "^3.3.2",
+    "vite": "^4.3.2"
+  }
 }
