@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "christian-kohler.npm-intellisense",
+    "42crunch.vscode-openapi",
+    "bradlc.vscode-tailwindcss"
+  ]
+}
