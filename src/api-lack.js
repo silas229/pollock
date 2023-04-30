@@ -155,11 +155,20 @@ voteRouter.post("/:token", async (req, res) => {
   }
 });
 
-voteRouter.get("/:token", (req, res) => {
-  res.send("Vote for token " + req.params.token);
+voteRouter.get("/:token", async (req, res) => {
+  try {
+    const vote = await Vote.getByToken(req.params.token);
 
-  if (req.header("accept") === "text/html") {
-    // TODO: Send html
+    if (req.header("accept") === "text/html") {
+      // TODO: Send html
+    }
+
+    console.log(vote);
+
+    await vote.response.then((r) => res.json(r));
+  } catch (e) {
+    console.error(e);
+    res.status(404).json(VoteResponse.error[404]);
   }
 });
 

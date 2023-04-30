@@ -1,6 +1,8 @@
+import { db } from "../routes.js";
 import User from "./User.js";
 import Choice from "./Choice.js";
 import Poll from "./Poll.js";
+import VoteResponse from "../responses/VoteResponse.js";
 
 export default class Vote {
   /**
@@ -16,10 +18,18 @@ export default class Vote {
 
     this.choice = [];
     choice.forEach((c) => this.choice.push(new Choice(c)));
+
+    this.time = new Date();
   }
 
+  /** @type{Promise<Poll>} */
   get poll() {
     return Poll.getByToken(this.poll_token);
+  }
+
+  /** @type {Promise<VoteResponse>} */
+  get response() {
+    return VoteResponse.generate(this);
   }
 
   /**
@@ -27,6 +37,6 @@ export default class Vote {
    * @returns {Vote}
    */
   static async getByToken(token) {
-    return new Poll(await db.findOneAsync({ _id: token }));
+    return new Vote(await db.findOneAsync({ _id: token }));
   }
 }
