@@ -3,6 +3,7 @@
     "christian-kohler.npm-intellisense",
     "42crunch.vscode-openapi",
     "bradlc.vscode-tailwindcss",
-    "antfu.vite"
+    "antfu.vite",
+    "esbenp.prettier-vscode"
   ]
 }
