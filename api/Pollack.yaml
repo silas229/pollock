@@ -14,7 +14,7 @@ info:
     The name is composed of **poll** and **lock** and is the name of a fish, the [pollock](https://en.wikipedia.org/wiki/Pollock). A special thing about this fish is that it is also called **pollack**. If _Pollock_ was implemented without registration, then it would therefore be called _Pollack_, because registration is lacking.
   version: 1.0.0
 servers:
-  - url: 'http'
+  - url: 'http://localhost:49725'
 tags:
   - name: poll
     description: Everything about a poll

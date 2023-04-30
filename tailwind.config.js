@@ -3,6 +3,7 @@ export default {
   content: [
     "./src/**/*.{html,js}",
   ],
+  darkMode: 'media',
   theme: {
     extend: {},
   },

@@ -2,11 +2,14 @@
   "name": "pollock",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "src/server.js",
   "scripts": {
+    "preview": "vite preview",
+    "start": "node src/server.js",
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "serve": "npm run build && node src/server.js"
   },
   "repository": {
     "type": "git",
@@ -18,12 +21,15 @@
   ],
   "author": "",
   "dependencies": {
-    "express": "^4.18.2"
+    "@seald-io/nedb": "^4.0.1",
+    "express": "^4.18.2",
+    "validatorjs": "^3.22.1",
+    "vite": "^4.0.4",
+    "vite-plugin-express": "^1.0.3"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.23",
-    "tailwindcss": "^3.3.2",
-    "vite": "^4.3.2"
+    "tailwindcss": "^3.3.2"
   }
 }
