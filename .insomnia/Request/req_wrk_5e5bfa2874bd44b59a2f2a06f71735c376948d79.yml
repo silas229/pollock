@@ -1,0 +1,29 @@
+_id: req_wrk_5e5bfa2874bd44b59a2f2a06f71735c376948d79
+type: Request
+parentId: fld_wrk_5e5bfa2874bd44b59a2f2a06f71735c312dea96f
+modified: 1682647010389
+created: 1682647010389
+url: "{{ base_url }}/user/key"
+name: Create a API-Key for an existent user.
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+      "name": "string",
+      "password": "string"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+authentication: {}
+metaSortKey: -1682647010389
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

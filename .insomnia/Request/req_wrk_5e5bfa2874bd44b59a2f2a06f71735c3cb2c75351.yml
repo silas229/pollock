@@ -1,0 +1,37 @@
+_id: req_wrk_5e5bfa2874bd44b59a2f2a06f71735c3cb2c75351
+type: Request
+parentId: fld_wrk_5e5bfa2874bd44b59a2f2a06f71735c3d6658a9d
+modified: 1682852581984
+created: 1682647010403
+url: "{{ base_url }}/vote/lack/{% response 'body',
+  'req_wrk_5e5bfa2874bd44b59a2f2a06f71735c3c1279b8a1',
+  'b64::JC5zaGFyZS52YWx1ZQ==::46b', 'never', 60 %}"
+name: Add a new vote to the poll
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+      "owner": {
+    		"name": "Silas"
+    	},
+      "choice": [
+        {
+          "id": 0
+        }
+      ]
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+authentication: {}
+metaSortKey: -1682647010403
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

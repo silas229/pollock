@@ -1,0 +1,23 @@
+_id: env_env_4cda1b8e86c5620df227574632f95108e5ef5ca7_sub__77b5f8e3
+type: Environment
+parentId: env_4cda1b8e86c5620df227574632f95108e5ef5ca7
+modified: 1682677611330
+created: 1682647010415
+name: local
+data:
+  scheme:
+    - http
+  base_path: ""
+  host: localhost:49725
+  apiKey: apiKey
+  token: tubPIn1UEwWrIAZi
+dataPropertyOrder:
+  "&":
+    - scheme
+    - base_path
+    - host
+    - apiKey
+    - token
+color: null
+isPrivate: false
+metaSortKey: 1682647010415

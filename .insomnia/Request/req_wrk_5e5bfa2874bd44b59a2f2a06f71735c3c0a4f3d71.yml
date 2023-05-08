@@ -1,0 +1,23 @@
+_id: req_wrk_5e5bfa2874bd44b59a2f2a06f71735c3c0a4f3d71
+type: Request
+parentId: fld_wrk_5e5bfa2874bd44b59a2f2a06f71735c3d6658a9d
+modified: 1682777514805
+created: 1682647010401
+url: "{{ base_url }}/vote/lack/{% response 'body',
+  'req_wrk_5e5bfa2874bd44b59a2f2a06f71735c3cb2c75351',
+  'b64::JC5lZGl0LnZhbHVl::46b', 'never', 60 %}"
+name: Find the vote of the token
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1682647010401
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

@@ -1,0 +1,38 @@
+_id: req_wrk_5e5bfa2874bd44b59a2f2a06f71735c303078c11
+type: Request
+parentId: fld_wrk_5e5bfa2874bd44b59a2f2a06f71735c3fd63f1ed
+modified: 1682647010396
+created: 1682647010396
+url: "{{ base_url }}/vote/lock/{{ token }}"
+name: Update a vote of the token
+description: ""
+method: PUT
+body:
+  mimeType: application/json
+  text: |-
+    {
+      "owner": null,
+      "choice": [
+        {
+          "id": 1,
+          "worst": true
+        }
+      ]
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+authentication:
+  type: apikey
+  key: API-KEY
+  value: "{{ apiKey }}"
+  addTo: header
+metaSortKey: -1682647010396
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

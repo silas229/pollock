@@ -1,0 +1,25 @@
+_id: req_wrk_5e5bfa2874bd44b59a2f2a06f71735c3b925fd41
+type: Request
+parentId: fld_wrk_5e5bfa2874bd44b59a2f2a06f71735c3fd63f1ed
+modified: 1682647010397
+created: 1682647010397
+url: "{{ base_url }}/vote/lock/{{ token }}"
+name: Find the vote of the token
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication:
+  type: apikey
+  key: API-KEY
+  value: "{{ apiKey }}"
+  addTo: header
+metaSortKey: -1682647010397
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

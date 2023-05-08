@@ -1,0 +1,43 @@
+_id: req_wrk_5e5bfa2874bd44b59a2f2a06f71735c36223037b
+type: Request
+parentId: fld_wrk_5e5bfa2874bd44b59a2f2a06f71735c34b687891
+modified: 1682647010409
+created: 1682647010409
+url: "{{ base_url }}/poll/lack/{{ token }}"
+name: Update a poll
+description: ""
+method: PUT
+body:
+  mimeType: application/json
+  text: |-
+    {
+      "title": "What is your favorite color?",
+      "description": "By blue are also meant blue-like colors, like turkish.",
+      "options": [
+        {
+          "id": 0,
+          "text": "string"
+        }
+      ],
+      "setting": {
+        "voices": 0,
+        "worst": true,
+        "deadline": "2023-05-29T19:21:39+02:00"
+      },
+      "fixed": [
+        0
+      ]
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+authentication: {}
+metaSortKey: -1682647010409
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

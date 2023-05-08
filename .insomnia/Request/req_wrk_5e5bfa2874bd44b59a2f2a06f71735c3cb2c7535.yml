@@ -1,0 +1,34 @@
+_id: req_wrk_5e5bfa2874bd44b59a2f2a06f71735c3cb2c7535
+type: Request
+parentId: fld_wrk_5e5bfa2874bd44b59a2f2a06f71735c3fd63f1ed
+modified: 1682647010403
+created: 1682647010403
+url: "{{ base_url }}/vote/lack/{{ token }}"
+name: Add a new vote to the poll
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+      "owner": null,
+      "choice": [
+        {
+          "id": 1,
+          "worst": true
+        }
+      ]
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+authentication: {}
+metaSortKey: -1682647010403
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

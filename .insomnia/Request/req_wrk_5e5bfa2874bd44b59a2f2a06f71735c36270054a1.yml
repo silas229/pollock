@@ -1,0 +1,34 @@
+_id: req_wrk_5e5bfa2874bd44b59a2f2a06f71735c36270054a1
+type: Request
+parentId: fld_wrk_5e5bfa2874bd44b59a2f2a06f71735c3d6658a9d
+modified: 1682647010399
+created: 1682647010399
+url: "{{ base_url }}/vote/lack/{{ token }}"
+name: Update a vote of the token
+description: ""
+method: PUT
+body:
+  mimeType: application/json
+  text: |-
+    {
+      "owner": null,
+      "choice": [
+        {
+          "id": 1,
+          "worst": true
+        }
+      ]
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+authentication: {}
+metaSortKey: -1682647010399
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

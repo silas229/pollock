@@ -1,0 +1,10 @@
+_id: fld_wrk_5e5bfa2874bd44b59a2f2a06f71735c3fd63f1ed
+type: RequestGroup
+parentId: wrk_5e5bfa2874bd44b59a2f2a06f71735c3
+modified: 1682647010413
+created: 1682647010413
+name: vote
+description: Everything about a vote
+environment: {}
+environmentPropertyOrder: null
+metaSortKey: -1682647010413

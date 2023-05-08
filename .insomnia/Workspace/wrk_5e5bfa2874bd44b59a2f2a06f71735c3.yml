@@ -1,0 +1,17 @@
+_id: wrk_5e5bfa2874bd44b59a2f2a06f71735c3
+type: Workspace
+parentId: null
+modified: 1682647015054
+created: 1682647015054
+name: Pollock 1.0.0
+description: >-
+  _Pollock_ is a specification for a [REST
+  API](https://www.redhat.com/en/topics/api/what-is-a-rest-api) based on the
+  [OpenAPI Specification 3 (OAS3)](https://spec.openapis.org/oas/v3.0.3).
+
+
+  _Pollock_ can be used to create polls, participate in them and modify them. Normally, the polls can be locked, so that only registered users can participate.
+
+
+  The name is composed of **poll** and **lock** and is the name of a fish, the [pollock](https://en.wikipedia.org/wiki/Pollock). A special thing about this fish is that it is also called **pollack**. If _Pollock_ was implemented without registration, then it would therefore be called _Pollack_, because registration is lacking.
+scope: design
