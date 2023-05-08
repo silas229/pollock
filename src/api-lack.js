@@ -90,6 +90,26 @@ pollRouter.get("/:token", async (req, res) => {
   }
 });
 
+pollRouter.delete("/:token", async (req, res) =>{
+  try{
+    let id = req.params.token;
+
+    //Checking if it's a valid admin token still TODO
+
+    db.remove({_id: id}, false, null);
+    db.remove({poll_token: id}, true, null);
+    
+    let response = {
+      code: "200",
+      message: "i.O." 
+    };
+    res.status(200).json(response);
+  }catch(e){
+    console.error(e);
+    res.status(404).json(PollResponse.error[404]);
+  }
+});
+
 voteRouter.post("/:token", async (req, res) => {
   try {
     const poll = await Poll.getByToken(req.params.token);
