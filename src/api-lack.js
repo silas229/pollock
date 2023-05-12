@@ -100,8 +100,9 @@ pollRouter.delete("/:token", async (req, res) =>{
 
     let admin = db.findOne({_id: token}, (err, adminDoc) =>{
       if(adminDoc != null){
-        db.remove({_id: adminDoc.poll_token});
-        db.remove({poll_token: adminDoc.poll_token}, true);
+        db.remove({_id: adminDoc.poll_id});
+        db.remove({poll_token: adminDoc.poll_id}, true);
+        db.remove({_id: adminDoc._id});
         res.status(200).json({
           code: "200",
           message: "i.O."

@@ -1,10 +1,10 @@
 /**
- * @property {String} poll_token token/_id of the poll this AdminToken is associated with
+ * @property {String} poll_id token/_id of the poll this AdminToken is associated with
  * @property {String} _id will be generated automatically by nedb, this is the admin token
  */
 class AdminToken{
     constructor(poll){
-        this.poll_token = poll._id;
+        this.poll_id = poll._id;
     }
 }
 
