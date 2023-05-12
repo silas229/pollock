@@ -2,6 +2,7 @@
 
 import { Router } from "express";
 import Poll from "./models/Poll.js";
+import AdminToken from "./models/AdminToken.js";
 import Vote from "./models/Vote.js";
 import Validator from "validatorjs";
 import { db } from "./routes.js";
@@ -52,18 +53,21 @@ pollRouter.post("/", (req, res) => {
       return;
     }
 
-    db.insertAsync(new Poll(req.body)).then((poll) =>
-      res.json({
-        admin: {
-          link: `${baseUrl + req.originalUrl}/${poll._id}`,
-          value: poll._id,
-        },
-        share: {
-          link: `${baseUrl + req.originalUrl}/${poll._id}`,
-          value: poll._id,
-        },
-      }),
-    );
+    db.insertAsync(new Poll(req.body)).then((poll) =>{
+
+      db.insertAsync(new AdminToken(poll)).then((admin) =>
+        res.json({
+          admin: {
+            link: `${baseUrl + req.originalUrl}/${admin._id}`,
+            value: admin._id,
+          },
+          share: {
+            link: `${baseUrl + req.originalUrl}/${poll._id}`,
+            value: poll._id
+          }
+        })
+      )
+    }); 
   } catch (e) {
     console.error(e);
     res.status(405).json(PollResponse.error[405]);
@@ -92,18 +96,25 @@ pollRouter.get("/:token", async (req, res) => {
 
 pollRouter.delete("/:token", async (req, res) =>{
   try{
-    let id = req.params.token;
+    let token = req.params.token;
 
-    //Checking if it's a valid admin token still TODO
-
-    db.remove({_id: id}, false, null);
-    db.remove({poll_token: id}, true, null);
+    let admin = db.findOne({_id: token}, (err, adminDoc) =>{
+      if(adminDoc != null){
+        db.remove({_id: adminDoc.poll_token});
+        db.remove({poll_token: adminDoc.poll_token}, true);
+        res.status(200).json({
+          code: "200",
+          message: "i.O."
+        });
+      }else{
+        res.status(400).json({
+          code: "400",
+          message: "Invalid poll admin token."
+        })
+        return;
+      }
+    });
     
-    let response = {
-      code: "200",
-      message: "i.O." 
-    };
-    res.status(200).json(response);
   }catch(e){
     console.error(e);
     res.status(404).json(PollResponse.error[404]);
