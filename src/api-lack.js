@@ -4,7 +4,6 @@ import { Router } from "express";
 import Poll from "./models/Poll.js";
 import Vote from "./models/Vote.js";
 import Validator from "validatorjs";
-import { db } from "./routes.js";
 import { baseUrl } from "./server.js";
 import PollResponse from "./responses/PollResponse.js";
 import VoteResponse from "./responses/VoteResponse.js";
@@ -20,22 +19,7 @@ apiLack.use(VoteResponse.base, voteRouter);
 
 pollRouter.post("/", (req, res) => {
   try {
-    const rules = {
-      title: "required|string",
-      description: "string",
-      options: "required|array",
-      "options.*.id": "required|integer|min:0",
-      "options.*.text": "required|string",
-      setting: {
-        voices: "integer|min:0",
-        worst: "boolean",
-        deadline: "date",
-      },
-      fixed: "array",
-      "fixed.*": "integer|min:0",
-    };
-
-    const validation = new Validator(req.body, rules);
+    const validation = new Validator(req.body, Poll.rules);
 
     if (validation.fails()) {
       res
@@ -43,7 +27,7 @@ pollRouter.post("/", (req, res) => {
         .json(
           Object.assign(
             { errors: validation.errors.all() },
-            PollResponse.error[405],
+            PollResponse.messages[405],
           ),
         );
       // Alternatively:
@@ -52,11 +36,11 @@ pollRouter.post("/", (req, res) => {
       return;
     }
 
-    db.insertAsync(new Poll(req.body)).then((poll) =>
+    new Poll(req.body).save().then((poll) =>
       res.json({
         admin: {
-          link: `${baseUrl + req.originalUrl}/${poll._id}`,
-          value: poll._id,
+          link: `${baseUrl + req.originalUrl}/${poll.admin_token}`,
+          value: poll.admin_token,
         },
         share: {
           link: `${baseUrl + req.originalUrl}/${poll._id}`,
@@ -66,7 +50,7 @@ pollRouter.post("/", (req, res) => {
     );
   } catch (e) {
     console.error(e);
-    res.status(405).json(PollResponse.error[405]);
+    res.status(405).json(PollResponse.messages[405]);
   }
 });
 
@@ -75,7 +59,7 @@ pollRouter.get("/:token", async (req, res) => {
     const poll = await Poll.getByToken(req.params.token);
 
     if (!poll.is_open) {
-      res.status(410).json(PollResponse.error[410]);
+      res.status(410).json(PollResponse.messages[410]);
       return;
     }
 
@@ -86,27 +70,54 @@ pollRouter.get("/:token", async (req, res) => {
     await poll.response.then((r) => res.json(r));
   } catch (e) {
     console.error(e);
-    res.status(404).json(PollResponse.error[404]);
+    res.status(404).json(PollResponse.messages[404]);
   }
 });
 
-pollRouter.delete("/:token", async (req, res) =>{
-  try{
-    let id = req.params.token;
+pollRouter.put("/:token", async (req, res) => {
+  try {
+    const admin_token = req.params.token;
+    let poll = await Poll.getByAdminToken(admin_token);
 
-    //Checking if it's a valid admin token still TODO
+    try {
+      Object.assign(poll, req.body);
+      const validation = new Validator(poll, Poll.rules);
 
-    db.remove({_id: id}, false, null);
-    db.remove({poll_token: id}, true, null);
-    
-    let response = {
-      code: "200",
-      message: "i.O." 
-    };
-    res.status(200).json(response);
-  }catch(e){
+      if (validation.fails()) {
+        res
+          .status(405)
+          .json(
+            Object.assign(
+              { errors: validation.errors.all() },
+              PollResponse.messages[405],
+            ),
+          );
+
+        return;
+      }
+
+      poll.save().then(() => res.json(PollResponse.messages[200]));
+    } catch (e) {
+      console.error(e);
+      res.status(405).json(PollResponse.messages[405]);
+    }
+  } catch (e) {
     console.error(e);
-    res.status(404).json(PollResponse.error[404]);
+    res.status(404).json(PollResponse.messages[404]);
+  }
+});
+
+pollRouter.delete("/:token", async (req, res) => {
+  try {
+    const admin_token = req.params.token;
+    const poll = await Poll.getByAdminToken(admin_token);
+
+    poll.delete();
+
+    res.status(200).json(PollResponse.messages[200]);
+  } catch (e) {
+    console.error(e);
+    res.status(404).json(PollResponse.messages[404]);
   }
 });
 
@@ -115,18 +126,9 @@ voteRouter.post("/:token", async (req, res) => {
     const poll = await Poll.getByToken(req.params.token);
 
     try {
-      const rules = {
-        "owner.name": "required|string",
-        choice: "required|array",
-        "choice.*.id": "required|integer|poll_valid_option", // TODO: poll_valid_option
-        "choice.*.worst": "boolean|poll_worst_allowed",
-      };
-
       Validator.register(
         "poll_valid_option",
         (value) => {
-          console.log(poll.options);
-
           return poll.options.find((o) => o.id === value);
         },
         "Choice :attribute is not a valid option for this poll.",
@@ -138,7 +140,7 @@ voteRouter.post("/:token", async (req, res) => {
         "'Worst' is not allowed for this poll.",
       );
 
-      const validation = new Validator(req.body, rules);
+      const validation = new Validator(req.body, Vote.rules);
 
       if (validation.fails()) {
         res
@@ -146,7 +148,7 @@ voteRouter.post("/:token", async (req, res) => {
           .json(
             Object.assign(
               { errors: validation.errors.all() },
-              VoteResponse.error[405],
+              VoteResponse.messages[405],
             ),
           );
         // Alternatively: (to hide errors and comply to spec)
@@ -155,9 +157,9 @@ voteRouter.post("/:token", async (req, res) => {
         return;
       }
 
-      req.body.poll_token = req.params.token;
+      req.body.poll_token = poll.token;
 
-      db.insertAsync(new Vote(req.body)).then((vote) =>
+      new Vote(req.body).save().then((vote) =>
         res.json({
           edit: {
             link: VoteResponse.getLink(vote._id),
@@ -167,11 +169,11 @@ voteRouter.post("/:token", async (req, res) => {
       );
     } catch (e) {
       console.error(e);
-      res.status(405).json(VoteResponse.error[405]);
+      res.status(405).json(VoteResponse.messages[405]);
     }
   } catch (e) {
     console.error(e);
-    res.status(404).json(PollResponse.error[404]);
+    res.status(404).json(PollResponse.messages[404]);
   }
 });
 
@@ -183,12 +185,73 @@ voteRouter.get("/:token", async (req, res) => {
       // TODO: Send html
     }
 
-    console.log(vote);
-
     await vote.response.then((r) => res.json(r));
   } catch (e) {
     console.error(e);
-    res.status(404).json(VoteResponse.error[404]);
+    res.status(404).json(VoteResponse.messages[404]);
+  }
+});
+
+voteRouter.put("/:token", async (req, res) => {
+  try {
+    const vote = await Vote.getByToken(req.params.token);
+    const poll = vote.poll;
+
+    try {
+      Validator.register(
+        "poll_valid_option",
+        (value) => {
+          return poll.options.find((o) => o.id === value);
+        },
+        "Choice :attribute is not a valid option for this poll.",
+      );
+
+      Validator.register(
+        "poll_worst_allowed",
+        (value) => !value || poll.setting.worst === true,
+        "'Worst' is not allowed for this poll.",
+      );
+
+      Object.assign(vote, req.body);
+      const validation = new Validator(vote, Vote.rules);
+
+      if (validation.fails()) {
+        res
+          .status(405)
+          .json(
+            Object.assign(
+              { errors: validation.errors.all() },
+              VoteResponse.messages[405],
+            ),
+          );
+        // Alternatively: (to hide errors and comply to spec)
+        // throw new Error("Validation Error");
+
+        return;
+      }
+
+      vote.save().then(() => res.json(VoteResponse.messages[200]));
+    } catch (e) {
+      console.error(e);
+      res.status(405).json(VoteResponse.messages[405]);
+    }
+  } catch (e) {
+    console.error(e);
+    res.status(404).json(VoteResponse.messages[404]);
+  }
+});
+
+voteRouter.delete("/:token", async (req, res) => {
+  try {
+    const token = req.params.token;
+    const vote = await Vote.getByToken(token);
+
+    vote.delete();
+
+    res.status(200).json(VoteResponse.messages[200]);
+  } catch (e) {
+    console.error(e);
+    res.status(404).json(VoteResponse.messages[404]);
   }
 });
 

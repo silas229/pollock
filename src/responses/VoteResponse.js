@@ -35,13 +35,13 @@ export default class VoteResponse extends Response {
 
   static _base = "/vote/lack";
 
-  static error = Object.assign(
+  static messages = Object.assign(
     {
       404: {
         code: 404,
         message: "Vote not found.",
       },
     },
-    Response.error,
+    Response.messages,
   );
 }

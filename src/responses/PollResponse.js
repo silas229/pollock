@@ -63,7 +63,7 @@ export default class PollResponse extends Response {
 
   static _base = "/poll/lack";
 
-  static error = Object.assign(
+  static messages = Object.assign(
     {
       400: {
         code: 400,
@@ -78,6 +78,6 @@ export default class PollResponse extends Response {
         message: "Poll is gone.",
       },
     },
-    Response.error,
+    Response.messages,
   );
 }
