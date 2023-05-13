@@ -94,6 +94,39 @@ pollRouter.get("/:token", async (req, res) => {
   }
 });
 
+//TODO: update already existing votes
+pollRouter.put("/:token", async (req, res) =>{
+  try{
+    let token = req.params.token;
+
+    db.findOne({_id: token}, (err, adminDoc) =>{
+      if(adminDoc != null){
+        let poll = new Poll(req.body);
+        db.updateAsync({_id: adminDoc.poll_id}, {
+          $set: {
+            title: poll.title, 
+            description: poll.description,
+            options: poll.options, 
+            setting: poll.setting, 
+            fixed: req.body.fixed}, 
+          }).then((info) =>{
+            if(info.numAffected == 1){
+              res.status(200).json({
+                code: "200",
+                message: "i.O."
+              });
+            }else{
+              res.status(404).json(PollResponse.error[404]);
+            }
+          });
+      }
+    });
+  }catch(e){
+    console.error(e);
+    res.status(404).json(PollResponse.error[404]);
+  }
+});
+
 pollRouter.delete("/:token", async (req, res) =>{
   try{
     let token = req.params.token;
