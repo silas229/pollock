@@ -14,7 +14,9 @@ class Poll {
   /**
    * Constructs poll object
    *
-   * @param {{title: String, description: String, options: Array<{id: Number, text: String}>, setting: {voices: Number, worst: Boolean, deadline: String}, fixed: [Array<Number>], token: [String], _id: [String]}} param0 object
+   * @param {{title: String, description: String, options: Array<{id: Number, text: String}>, 
+   * setting: {voices: Number, worst: Boolean, deadline: String}, 
+   * fixed: [Array<Number>], token: [String], _id: [String]}} param0 object
    */
   constructor({
     title,
@@ -25,6 +27,7 @@ class Poll {
     _id = null,
     token = null,
   }) {
+   
     this.token = token ?? _id;
     this.title = title;
     this.description = description;

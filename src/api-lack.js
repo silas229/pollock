@@ -2,6 +2,7 @@
 
 import { Router } from "express";
 import Poll from "./models/Poll.js";
+import AdminToken from "./models/AdminToken.js";
 import Vote from "./models/Vote.js";
 import Validator from "validatorjs";
 import { db } from "./routes.js";
@@ -52,18 +53,21 @@ pollRouter.post("/", (req, res) => {
       return;
     }
 
-    db.insertAsync(new Poll(req.body)).then((poll) =>
-      res.json({
-        admin: {
-          link: `${baseUrl + req.originalUrl}/${poll._id}`,
-          value: poll._id,
-        },
-        share: {
-          link: `${baseUrl + req.originalUrl}/${poll._id}`,
-          value: poll._id,
-        },
-      }),
-    );
+    db.insertAsync(new Poll(req.body)).then((poll) =>{
+
+      db.insertAsync(new AdminToken(poll)).then((admin) =>
+        res.json({
+          admin: {
+            link: `${baseUrl + req.originalUrl}/${admin._id}`,
+            value: admin._id,
+          },
+          share: {
+            link: `${baseUrl + req.originalUrl}/${poll._id}`,
+            value: poll._id
+          }
+        })
+      )
+    }); 
   } catch (e) {
     console.error(e);
     res.status(405).json(PollResponse.error[405]);
@@ -85,6 +89,67 @@ pollRouter.get("/:token", async (req, res) => {
 
     await poll.response.then((r) => res.json(r));
   } catch (e) {
+    console.error(e);
+    res.status(404).json(PollResponse.error[404]);
+  }
+});
+
+//TODO: update already existing votes
+pollRouter.put("/:token", async (req, res) =>{
+  try{
+    let token = req.params.token;
+
+    db.findOne({_id: token}, (err, adminDoc) =>{
+      if(adminDoc != null){
+        let poll = new Poll(req.body);
+        db.updateAsync({_id: adminDoc.poll_id}, {
+          $set: {
+            title: poll.title, 
+            description: poll.description,
+            options: poll.options, 
+            setting: poll.setting, 
+            fixed: req.body.fixed}, 
+          }).then((info) =>{
+            if(info.numAffected == 1){
+              res.status(200).json({
+                code: "200",
+                message: "i.O."
+              });
+            }else{
+              res.status(404).json(PollResponse.error[404]);
+            }
+          });
+      }
+    });
+  }catch(e){
+    console.error(e);
+    res.status(404).json(PollResponse.error[404]);
+  }
+});
+
+pollRouter.delete("/:token", async (req, res) =>{
+  try{
+    let token = req.params.token;
+
+    let admin = db.findOne({_id: token}, (err, adminDoc) =>{
+      if(adminDoc != null){
+        db.remove({_id: adminDoc.poll_id});
+        db.remove({poll_token: adminDoc.poll_id}, true);
+        db.remove({_id: adminDoc._id});
+        res.status(200).json({
+          code: "200",
+          message: "i.O."
+        });
+      }else{
+        res.status(400).json({
+          code: "400",
+          message: "Invalid poll admin token."
+        })
+        return;
+      }
+    });
+    
+  }catch(e){
     console.error(e);
     res.status(404).json(PollResponse.error[404]);
   }
