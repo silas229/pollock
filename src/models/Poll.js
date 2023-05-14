@@ -93,7 +93,7 @@ class Poll extends Model {
    * @type {Promise<Vote[]>}
    */
   get votes() {
-    return Poll.db
+    return Vote.db
       .find({ poll_token: this.token })
       .then((votes) => votes.map((v) => new Vote(v)), []);
   }

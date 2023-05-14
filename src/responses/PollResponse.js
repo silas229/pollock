@@ -1,5 +1,4 @@
 import Poll from "../models/Poll.js";
-import Vote from "../models/Vote.js";
 import User from "../models/User.js";
 import Response from "./Response.js";
 
