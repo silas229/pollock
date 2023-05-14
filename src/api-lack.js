@@ -49,7 +49,6 @@ pollRouter.post("/", (req, res) => {
       }),
     );
   } catch (e) {
-    console.error(e);
     res.status(405).json(PollResponse.messages[405]);
   }
 });
@@ -69,7 +68,6 @@ pollRouter.get("/:token", async (req, res) => {
 
     await poll.response.then((r) => res.json(r));
   } catch (e) {
-    console.error(e);
     res.status(404).json(PollResponse.messages[404]);
   }
 });
@@ -98,11 +96,9 @@ pollRouter.put("/:token", async (req, res) => {
 
       poll.save().then(() => res.json(PollResponse.messages[200]));
     } catch (e) {
-      console.error(e);
       res.status(405).json(PollResponse.messages[405]);
     }
   } catch (e) {
-    console.error(e);
     res.status(404).json(PollResponse.messages[404]);
   }
 });
@@ -116,7 +112,6 @@ pollRouter.delete("/:token", async (req, res) => {
 
     res.status(200).json(PollResponse.messages[200]);
   } catch (e) {
-    console.error(e);
     res.status(404).json(PollResponse.messages[404]);
   }
 });
@@ -168,11 +163,9 @@ voteRouter.post("/:token", async (req, res) => {
         }),
       );
     } catch (e) {
-      console.error(e);
       res.status(405).json(VoteResponse.messages[405]);
     }
   } catch (e) {
-    console.error(e);
     res.status(404).json(PollResponse.messages[404]);
   }
 });
@@ -187,7 +180,6 @@ voteRouter.get("/:token", async (req, res) => {
 
     await vote.response.then((r) => res.json(r));
   } catch (e) {
-    console.error(e);
     res.status(404).json(VoteResponse.messages[404]);
   }
 });
@@ -195,7 +187,7 @@ voteRouter.get("/:token", async (req, res) => {
 voteRouter.put("/:token", async (req, res) => {
   try {
     const vote = await Vote.getByToken(req.params.token);
-    const poll = vote.poll;
+    const poll = await vote.poll;
 
     try {
       Validator.register(
@@ -232,11 +224,9 @@ voteRouter.put("/:token", async (req, res) => {
 
       vote.save().then(() => res.json(VoteResponse.messages[200]));
     } catch (e) {
-      console.error(e);
       res.status(405).json(VoteResponse.messages[405]);
     }
   } catch (e) {
-    console.error(e);
     res.status(404).json(VoteResponse.messages[404]);
   }
 });
@@ -250,7 +240,6 @@ voteRouter.delete("/:token", async (req, res) => {
 
     res.status(200).json(VoteResponse.messages[200]);
   } catch (e) {
-    console.error(e);
     res.status(404).json(VoteResponse.messages[404]);
   }
 });
