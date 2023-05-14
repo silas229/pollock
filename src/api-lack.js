@@ -2,6 +2,7 @@
 
 import { Router } from "express";
 import Poll from "./models/Poll.js";
+import AdminToken from "./models/AdminToken.js";
 import Vote from "./models/Vote.js";
 import Validator from "validatorjs";
 import { baseUrl } from "./server.js";
