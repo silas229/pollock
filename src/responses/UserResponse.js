@@ -1,7 +1,7 @@
 import Response from "./Response.js";
 
 export default class UserResponse extends Response {
-  static error = Object.assign(
+  static messages = Object.assign(
     {
       400: {
         code: 400,
@@ -12,6 +12,6 @@ export default class UserResponse extends Response {
         message: "User not found.",
       },
     },
-    Response.error,
+    Response.messages,
   );
 }

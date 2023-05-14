@@ -1,5 +1,4 @@
 import Poll from "../models/Poll.js";
-import Vote from "../models/Vote.js";
 import User from "../models/User.js";
 import Response from "./Response.js";
 
@@ -63,7 +62,7 @@ export default class PollResponse extends Response {
 
   static _base = "/poll/lack";
 
-  static error = Object.assign(
+  static messages = Object.assign(
     {
       400: {
         code: 400,
@@ -78,6 +77,6 @@ export default class PollResponse extends Response {
         message: "Poll is gone.",
       },
     },
-    Response.error,
+    Response.messages,
   );
 }

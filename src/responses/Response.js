@@ -15,7 +15,11 @@ export default class Response {
     return this._base;
   }
 
-  static error = {
+  static messages = {
+    200: {
+      code: "200",
+      message: "i.O.",
+    },
     405: {
       code: 405,
       message: "Invalid input",
