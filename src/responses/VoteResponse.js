@@ -20,16 +20,16 @@ export default class VoteResponse extends Response {
   static async generate(body) {
     const poll = await body.poll;
 
+    const time = body.time;
+
+    body.token = undefined;
+    body.poll_token = undefined;
+    body.time = undefined;
+
     return {
-      poll: {
-        body: poll,
-        share: {
-          id: body.poll_token,
-          link: PollResponse.getLink(body.poll_token),
-        },
-      },
+      poll: (await poll.response).poll,
       vote: body, // TODO: Remove token, poll_token, time
-      time: body.time,
+      time: time,
     };
   }
 
