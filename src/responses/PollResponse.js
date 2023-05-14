@@ -26,14 +26,18 @@ export default class PollResponse extends Response {
    */
   static async generate(body) {
     const votes = await body.votes;
+    const token = body.token;
+
+    // Remove properties that are not in spec
+    body.token = undefined;
+    body.admin_token = undefined;
 
     return {
       poll: {
         body: body,
-        // TODO: delete response.poll.body.token;
         share: {
-          id: body.token,
-          link: PollResponse.getLink(body.token),
+          id: token,
+          link: PollResponse.getLink(token),
         },
       },
 
