@@ -1,9 +1,11 @@
 _id: req_wrk_5e5bfa2874bd44b59a2f2a06f71735c36270054a1
 type: Request
 parentId: fld_wrk_5e5bfa2874bd44b59a2f2a06f71735c3d6658a9d
-modified: 1682647010399
+modified: 1684050298486
 created: 1682647010399
-url: "{{ base_url }}/vote/lack/{{ token }}"
+url: "{{ base_url }}/vote/lack/{% response 'body',
+  'req_wrk_5e5bfa2874bd44b59a2f2a06f71735c3cb2c75351',
+  'b64::JC5lZGl0LnZhbHVl::46b', 'never', 60 %}"
 name: Update a vote of the token
 description: ""
 method: PUT
@@ -11,11 +13,9 @@ body:
   mimeType: application/json
   text: |-
     {
-      "owner": null,
       "choice": [
         {
-          "id": 1,
-          "worst": true
+          "id": 0
         }
       ]
     }

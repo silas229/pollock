@@ -1,9 +1,11 @@
 _id: req_wrk_5e5bfa2874bd44b59a2f2a06f71735c32ff6d6b41
 type: Request
 parentId: fld_wrk_5e5bfa2874bd44b59a2f2a06f71735c3d6658a9d
-modified: 1682647010398
+modified: 1683990642556
 created: 1682647010398
-url: "{{ base_url }}/vote/lack/{{ token }}"
+url: "{{ base_url }}/vote/lack/{% response 'body',
+  'req_wrk_5e5bfa2874bd44b59a2f2a06f71735c3cb2c75351',
+  'b64::JC5lZGl0LnZhbHVl::46b', 'never', 60 %}"
 name: Delete a vote of the token
 description: ""
 method: DELETE
