@@ -4,6 +4,8 @@
     "42crunch.vscode-openapi",
     "bradlc.vscode-tailwindcss",
     "antfu.vite",
-    "esbenp.prettier-vscode"
+    "esbenp.prettier-vscode",
+    "andrejunges.handlebars",
+    "heybourn.headwind"
   ]
 }

@@ -66,7 +66,7 @@ class Poll extends Model {
       "options.*.id": "required|integer|min:0",
       "options.*.text": "required|string",
       setting: {
-        voices: "integer|min:0",
+        voices: "integer|min:0|poll_number_of_voices",
         worst: "boolean",
         deadline: "date",
       },

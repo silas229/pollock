@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[type="text"],
+[type="number"],
+[type="datetime-local"],
+textarea {
+  @apply block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6;
+}
+
+input ~ label,
+textarea ~ label,
+.label {
+  @apply block text-sm font-medium leading-6 text-gray-900;
+}
+
+legend {
+  @apply text-base font-semibold leading-7 text-gray-900;
+}
+
+.btn-circle {
+  @apply text-white h-8 w-8 rounded-full hover:shadow-lg shadow-primary-300 transition-shadow;
+}
+
+span.error {
+  @apply mt-3 text-sm leading-6 text-red-400 hidden;
+}
+
+.is-invalid {
+  @apply ring-red-400;
+}
+
+.is-invalid ~ span.error {
+  @apply block;
+}

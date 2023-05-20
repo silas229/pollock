@@ -5,7 +5,7 @@ import Poll from "./models/Poll.js";
 import AdminToken from "./models/AdminToken.js";
 import Vote from "./models/Vote.js";
 import Validator from "validatorjs";
-import { baseUrl } from "./server.js";
+import { baseUrl } from "./main.js";
 import PollResponse from "./responses/PollResponse.js";
 import VoteResponse from "./responses/VoteResponse.js";
 
@@ -18,8 +18,18 @@ apiLack.use(VoteResponse.base, voteRouter);
 
 // Validator.useLang("de");
 
-pollRouter.post("/", (req, res) => {
+pollRouter.post("/", async (req, res) => {
   try {
+    console.log(req.body);
+
+    Validator.register(
+      "poll_number_of_voices",
+      (value) => {
+        return value <= req.body.options.length;
+      },
+      "The number of votes may not be higher than the number of options.",
+    );
+
     const validation = new Validator(req.body, Poll.rules);
 
     if (validation.fails()) {

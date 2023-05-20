@@ -1,0 +1,65 @@
+<div class="pb-12 border-b border-gray-900/10">
+
+  <h2 class="text-2xl font-semibold leading-7 text-gray-900">New Poll</h2>
+
+  <div class="divide-y divide-gray-300/50">
+    <div class="py-8 space-y-6 text-base leading-7 text-gray-600">
+      <form action="./poll/lack" method="post">
+
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" required />
+        <span class="error" for="title"></span>
+
+        <label for="description">Description</label>
+        <textarea name="description" id="description" rows="4"></textarea>
+        <span class="error" for="description"></span>
+
+        <fieldset class="grid grid-cols-3 grid-rows-1">
+          <legend class="block">Options</legend>
+          <div class="col-span-2">
+            <div class="float-right">
+              <button id="addOption" class="bg-green-400 btn-circle">+</button>
+              <button id="removeOption"
+                class="bg-red-400 btn-circle disabled:bg-gray-400 disabled:cursor-not-allowed">-</button>
+            </div>
+            <ul id="options" class="list-disc list-inside"></ul>
+            <span class="error" for="options"></span>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Settings</legend>
+
+          <div class="grid grid-cols-3 gap-2">
+            <div class="">
+              <label for="voices">Number of voices</label>
+              <input type="number" min="1" id="voices" name="settings.voices" value="1" required />
+            </div>
+
+            <div class="mt-6 space-y-6">
+              <div class="relative flex gap-x-3">
+                <div class="flex items-center h-6">
+                  <input id="worst" name="worst" type="checkbox"
+                    class="w-4 h-4 border-gray-300 rounded text-primary-600 focus:ring-primary-600">
+                </div>
+                <div class="text-sm leading-6">
+                  <label for="worst" class="font-medium text-gray-900">Worst?</label>
+                  <p class="text-gray-500">Get notified when someones posts a comment on a posting.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="">
+              <label for="deadline">Deadline</label>
+              <input type="datetime-local" name="deadline" id="deadline" />
+            </div>
+          </div>
+        </fieldset>
+
+        <input type="submit"
+          class="px-3 py-2 text-sm font-semibold text-white rounded-md shadow-sm bg-primary-600 hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600" />
+      </form>
+    </div>
+  </div>
+</div>
+<script src="js/form.js" defer async></script>
