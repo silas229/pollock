@@ -102,6 +102,7 @@ class Poll extends Model {
         votes.map((v) => {
           const vote = new Vote(v);
           vote.owner.password = undefined;
+          return vote;
         }),
       [],
     );
