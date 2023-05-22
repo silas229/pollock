@@ -98,9 +98,19 @@ pollRouter.get("/:token", async (req, res) => {
       return;
     }
 
+    let votes = await poll.votes;
+    votes = await votes.map((v) => {
+      v.choice = v.choice.map((c) => {
+        c.text = poll.options.find((o) => o.id === c.id).text;
+        return c;
+      });
+      return v;
+    });
+
     res.render("show", {
       title: poll.title,
       poll: poll,
+      votes: votes,
     });
   } catch (e) {
     console.error(e);
