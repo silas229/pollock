@@ -8,12 +8,12 @@ import { baseUrl } from "./main.js";
 import PollResponse from "./responses/PollResponse.js";
 import VoteResponse from "./responses/VoteResponse.js";
 
-const apiLack = Router(),
+const lack = Router(),
   pollRouter = Router(),
   voteRouter = Router();
 
-apiLack.use(PollResponse.base, pollRouter);
-apiLack.use(VoteResponse.base, voteRouter);
+lack.use(PollResponse.base, pollRouter);
+lack.use(VoteResponse.base, voteRouter);
 
 // Validator.useLang("de");
 
@@ -300,4 +300,4 @@ voteRouter.delete("/:token", async (req, res) => {
   }
 });
 
-export default apiLack;
+export default lack;
