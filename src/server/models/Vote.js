@@ -29,7 +29,7 @@ export default class Vote extends Model {
     this.choice = [];
     choice.forEach((c) => this.choice.push(new Choice(c)));
 
-    this.time = new Date(time ?? undefined);
+    this.time = new Date(time);
   }
 
   /**
