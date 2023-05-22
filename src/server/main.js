@@ -1,6 +1,7 @@
 import router from "./routes.js";
 import { engine } from "express-handlebars";
 import express from "express";
+import session from "express-session";
 import cors from "cors";
 import ViteExpress from "vite-express";
 
@@ -13,6 +14,13 @@ ViteExpress.config({
 
 app.get(cors());
 app.use(express.json());
+app.use(
+  session({
+    secret: "HnUJpFtpHumrE4WmgVqfbWuDnev72EvJjCmPDemphHZYpXjTjTuVcbXCsjm5pTdj",
+    resave: false,
+    saveUninitialized: true,
+  }),
+);
 
 app.use(express.static("public"));
 
