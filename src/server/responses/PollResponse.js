@@ -36,8 +36,8 @@ export default class PollResponse extends Response {
       poll: {
         body: body,
         share: {
-          id: token,
           link: PollResponse.getLink(token),
+          value: token,
         },
       },
 
