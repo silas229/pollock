@@ -1,20 +1,22 @@
 import { defineConfig } from "vite";
 import postcssImport from "postcss-import";
 import tailwindcss from "tailwindcss";
+import app, { port } from "./src/server/main.js";
+import vitePluginExpress from "vite-plugin-express";
 
 export default defineConfig({
   root: "src",
   build: {},
-  // server: {
-  //   // port: port,
-  //   middlewareMode: true,
-  // },
+  server: {
+    port: port,
+    // middlewareMode: true,
+  },
   plugins: [
-    // vitePluginExpress({
-    //   // app: () => app,
-    //   middlewareFiles: "src/routes.js",
-    //   prefixUrl: "/",
-    // }),
+    vitePluginExpress({
+      app: () => app,
+      middlewareFiles: "./src/server/routes.js",
+      prefixUrl: "/",
+    }),
   ],
   css: {
     postcss: {

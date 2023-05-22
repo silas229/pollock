@@ -7,8 +7,8 @@ const router = Router();
 const frontend = Router();
 
 frontend.get("/", (req, res) => {
-  res.render("index", {
-    title: "Test",
+  res.render("create", {
+    title: "New Poll",
   });
 });
 

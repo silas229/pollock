@@ -1,5 +1,5 @@
 import Nedb from "@seald-io/nedb";
-import NotImplementedError from "../NotImplemetedError.js";
+import NotImplementedError from "../errors/NotImplemetedError.js";
 import Response from "../responses/Response.js";
 
 export default class Model {

@@ -2,6 +2,7 @@
 export default {
   mode: "jit",
   content: ["./src/**/*.{html,js,hbs}"],
+  safelist: ["fill-white-500", "fill-black-500", "fill-primary-500"],
   darkMode: "media",
   theme: {
     extend: {

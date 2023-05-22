@@ -6,7 +6,7 @@
   "type": "module",
   "main": "src/server/main.js",
   "scripts": {
-    "dev": "nodemon --ext js,css,hbs src/server/main.js -w src/server",
+    "dev": "nodemon --ext js,css,hbs ./src/server/main.js",
     "start": "NODE_ENV=production node src/server/main.js",
     "build": "vite build"
   },
@@ -21,11 +21,14 @@
   "author": "Gruppe 25",
   "dependencies": {
     "@seald-io/nedb": "^4.0.1",
+    "alpinejs": "^3.12.1",
+    "bcrypt": "^5.1.0",
     "express": "^4.18.2",
     "express-handlebars": "^7.0.7",
     "handlebars": "^4.7.7",
     "validatorjs": "^3.22.1",
-    "vite-express": "^0.7.0"
+    "vite-express": "^0.7.0",
+    "vite-plugin-express": "^1.0.3"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.3",

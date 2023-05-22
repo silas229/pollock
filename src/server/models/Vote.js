@@ -9,11 +9,18 @@ export default class Vote extends Model {
   static db = new Nedb({ filename: "./data/votes.db", autoload: true });
   /**
    * Constructs vote object
-   * @param {{poll_token: String, owner: {name: String}, choice: Array<{id: Number, worst: [boolean]}>, token: [String], _id: [String]}} param0 object
+   * @param {{poll_token: String, owner: {name: String}, choice: Array<{id: Number, worst: [boolean]}>, time: [String], token: [String], _id: [String]}} param0 object
    *
    * @return {{poll_token: String, owner: {name: String}, choice: Array<Choice>}}
    */
-  constructor({ poll_token, owner, choice, token = null, _id = null }) {
+  constructor({
+    poll_token,
+    owner,
+    choice,
+    time = null,
+    token = null,
+    _id = null,
+  }) {
     super();
     this.token = token ?? _id;
     this.poll_token = poll_token;
@@ -22,7 +29,7 @@ export default class Vote extends Model {
     this.choice = [];
     choice.forEach((c) => this.choice.push(new Choice(c)));
 
-    this.time = new Date();
+    this.time = new Date(time ?? undefined);
   }
 
   /**

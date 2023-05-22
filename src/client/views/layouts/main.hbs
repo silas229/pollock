@@ -6,13 +6,35 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{title}}</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 
-<body>
-  <div class="container p-4 mx-auto">
-    {{{body}}}
+
+<body class="font-sans antialiased">
+  <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+    {{> navigation}}
+
+    <!-- Page Heading -->
+    {{#if title}}
+    <header class="bg-white shadow dark:bg-gray-800">
+      <div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">{{ title }}</h2>
+      </div>
+    </header>
+    {{/if}}
+
+    <main>
+      {{{body}}}
+    </main>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      Alpine.start();
+    });
+  </script>
 </body>
 
 </html>

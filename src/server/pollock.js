@@ -17,26 +17,6 @@ apiLack.use(VoteResponse.base, voteRouter);
 
 // Validator.useLang("de");
 
-pollRouter.get("/create", (req, res) => {
-  res.render("create", {
-    title: "New Poll",
-  });
-});
-
-pollRouter.get("/:token/edit", async (req, res) => {
-  try {
-    const poll = await Poll.getByAdminToken(req.params.token);
-
-    res.render("edit", {
-      title: "Edit: " + poll.title,
-      admin_token: req.params.token,
-      poll: poll,
-    });
-  } catch (e) {
-    res.status(404).json(PollResponse.messages[404]);
-  }
-});
-
 pollRouter.post("/", async (req, res) => {
   try {
     console.log(req.body);
@@ -69,7 +49,7 @@ pollRouter.post("/", async (req, res) => {
     new Poll(req.body).save().then((poll) =>
       res.json({
         admin: {
-          link: `${baseUrl + req.originalUrl}/${poll.admin_token}/edit`,
+          link: `${baseUrl + req.originalUrl}/${poll.admin_token}`,
           value: poll.admin_token,
         },
         share: {
@@ -111,14 +91,6 @@ pollRouter.put("/:token", async (req, res) => {
       Object.assign(poll, req.body);
       const validation = new Validator(poll, Poll.rules);
 
-      Validator.register(
-        "poll_number_of_voices",
-        (value) => {
-          return value <= req.body.options.length;
-        },
-        "The number of votes may not be higher than the number of options.",
-      );
-
       if (validation.fails()) {
         res
           .status(405)
@@ -134,7 +106,6 @@ pollRouter.put("/:token", async (req, res) => {
 
       poll.save().then(() => res.json(PollResponse.messages[200]));
     } catch (e) {
-      console.error(e);
       res.status(405).json(PollResponse.messages[405]);
     }
   } catch (e) {

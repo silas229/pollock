@@ -51,13 +51,6 @@ class Poll extends Model {
     this.fixed = fixed ?? [];
   }
 
-  /**
-   * @returns {Promise<Poll>}
-   */
-  async save() {
-    return this._save(Poll.db);
-  }
-
   static get rules() {
     return {
       title: "required|string",
@@ -73,6 +66,17 @@ class Poll extends Model {
       fixed: "array",
       "fixed.*": "integer|min:0",
     };
+  }
+
+  static get lock_rules() {
+    return Object.assign({}, Poll.rules); // TODO lock rules
+  }
+
+  /**
+   * @returns {Promise<Poll>}
+   */
+  async save() {
+    return this._save(Poll.db);
   }
 
   /**
@@ -93,9 +97,14 @@ class Poll extends Model {
    * @type {Promise<Vote[]>}
    */
   get votes() {
-    return Vote.db
-      .find({ poll_token: this.token })
-      .then((votes) => votes.map((v) => new Vote(v)), []);
+    return Vote.db.find({ poll_token: this.token }).then(
+      (votes) =>
+        votes.map((v) => {
+          const vote = new Vote(v);
+          vote.owner.password = undefined;
+        }),
+      [],
+    );
   }
 
   /**
