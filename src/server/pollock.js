@@ -7,17 +7,23 @@ import Validator from "validatorjs";
 import { baseUrl } from "./main.js";
 import PollResponse from "./responses/PollResponse.js";
 import VoteResponse from "./responses/VoteResponse.js";
+import Response from "./responses/Response.js";
+import { authorizeByCredentials, isAuthenticated } from "./middlewares.js";
+import User from "./models/User.js";
+import UserResponse from "./responses/UserResponse.js";
 
-const apiLack = Router(),
+const lock = Router(),
   pollRouter = Router(),
-  voteRouter = Router();
+  voteRouter = Router(),
+  userRouter = Router();
 
-apiLack.use(PollResponse.base, pollRouter);
-apiLack.use(VoteResponse.base, voteRouter);
+lock.use("/poll/lock", pollRouter);
+lock.use("/vote/lock", voteRouter);
+lock.use("/user", userRouter);
 
 // Validator.useLang("de");
 
-pollRouter.post("/", async (req, res) => {
+pollRouter.post("/", isAuthenticated, async (req, res) => {
   try {
     console.log(req.body);
 
@@ -82,7 +88,7 @@ pollRouter.get("/:token", async (req, res) => {
   }
 });
 
-pollRouter.put("/:token", async (req, res) => {
+pollRouter.put("/:token", isAuthenticated, async (req, res) => {
   try {
     const admin_token = req.params.token;
     let poll = await Poll.getByAdminToken(admin_token);
@@ -113,7 +119,7 @@ pollRouter.put("/:token", async (req, res) => {
   }
 });
 
-pollRouter.delete("/:token", async (req, res) => {
+pollRouter.delete("/:token", isAuthenticated, async (req, res) => {
   try {
     const admin_token = req.params.token;
     const poll = await Poll.getByAdminToken(admin_token);
@@ -254,4 +260,64 @@ voteRouter.delete("/:token", async (req, res) => {
   }
 });
 
-export default apiLack;
+userRouter.post("/", async (req, res) => {
+  try {
+    const validation = new Validator(req.body, User.rules);
+
+    if (validation.fails()) {
+      res
+        .status(405)
+        .json(
+          Object.assign(
+            { errors: validation.errors.all() },
+            Response.messages[405],
+          ),
+        );
+      // Alternatively: (to hide errors and comply to spec)
+      // throw new Error("Validation Error");
+    }
+
+    try {
+      await User.getByName(req.body.name);
+      // Return 400 if username is already reserved
+      res.status(400).json(UserResponse.messages[400]);
+    } catch (e) {
+      req.body.lock = true;
+      req.body.password = User.passwordHash(req.body.password);
+
+      const user = new User(req.body);
+      user.save();
+
+      return res.json((await user.createApiToken())._id);
+    }
+  } catch (e) {
+    console.error(e);
+    res.status(405).json(Response.messages[405]);
+  }
+});
+
+userRouter.post("/key", async (req, res) => {
+  try {
+    const user = await User.getByCredentials(req.body.name, req.body.password);
+    return res.json((await user.createApiToken())._id);
+  } catch (e) {
+    return res.status(401).json(Response.messages[401]);
+  }
+});
+
+userRouter.get("/:name", async (req, res) => {
+  try {
+    const user = await User.getByName(req.params.name);
+
+    await user.response.then((r) => res.json(r));
+  } catch (e) {
+    return res.status(404).json(UserResponse.messages[404]);
+  }
+});
+
+userRouter.delete("/:name", isAuthenticated, async (req, res) => {
+  try {
+  } catch (e) {}
+});
+
+export default lock;
