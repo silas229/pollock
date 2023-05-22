@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "nodemon --ext js,css,hbs ./src/server/main.js",
     "start": "NODE_ENV=production node src/server/main.js",
-    "build": "vite build"
+    "build:css": "npx tailwindcss -i ./src/client/style.css -o ./public/css/style.css",
+    "watch:css": "npx tailwindcss -i ./src/client/style.css -o ./public/css/style.css --watch"
   },
   "repository": {
     "type": "git",
@@ -23,20 +24,20 @@
     "@seald-io/nedb": "^4.0.1",
     "alpinejs": "^3.12.1",
     "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
     "express-handlebars": "^7.0.7",
     "express-session": "^1.17.3",
+    "express-xss-sanitizer": "^1.1.6",
     "handlebars": "^4.7.7",
-    "validatorjs": "^3.22.1",
-    "vite-express": "^0.7.0",
-    "vite-plugin-express": "^1.0.3"
+    "ip": "^1.1.8",
+    "validatorjs": "^3.22.1"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.3",
     "autoprefixer": "^10.4.14",
     "nodemon": "^2.0.20",
     "postcss": "^8.4.23",
-    "tailwindcss": "^3.3.2",
-    "vite": "^4.0.4"
+    "tailwindcss": "^3.3.2"
   }
 }

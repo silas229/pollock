@@ -1,18 +1,19 @@
-import router from "./routes.js";
 import { engine } from "express-handlebars";
 import express from "express";
 import session from "express-session";
 import cors from "cors";
-import ViteExpress from "vite-express";
+import { xss } from "express-xss-sanitizer";
+import ip from "ip";
+
+import router from "./routes.js";
 
 const app = express();
 export const port = 49725;
-export const baseUrl = "http://localhost:" + port;
-ViteExpress.config({
-  printViteDevServerHost: true,
-});
+export const baseUrl = "http://" + ip.address() + ":" + port;
 
 app.get(cors());
+
+app.use(xss());
 app.use(express.json());
 app.use(
   session({
@@ -44,12 +45,8 @@ app.set("view engine", ".hbs");
 app.set("views", "./src/client/views");
 app.use(router);
 
-app.get("/message", (_, res) => res.send("Hello from vite!"));
-
-// ViteExpress.listen(app, port, () =>
-//   console.log("Server is running:  " + baseUrl),
-// );
-
-app.listen(port, () => console.log("Server is running:  " + baseUrl));
+app.listen(port, () =>
+  console.log("\n\nServer is running:  " + baseUrl + "\n\n"),
+);
 
 export default app;
