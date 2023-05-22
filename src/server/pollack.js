@@ -92,12 +92,18 @@ pollRouter.get("/:token", async (req, res) => {
       return;
     }
 
-    if (req.header("accept") === "text/html") {
-      // TODO: Send html
+    console.log(req.header("Accept"));
+    if (!req.header("Accept") || req.header("Accept") === "application/json") {
+      await poll.response.then((r) => res.json(r));
+      return;
     }
 
-    await poll.response.then((r) => res.json(r));
+    res.render("show", {
+      title: poll.title,
+      poll: poll,
+    });
   } catch (e) {
+    console.error(e);
     res.status(404).json(PollResponse.messages[404]);
   }
 });
@@ -219,6 +225,7 @@ voteRouter.get("/:token", async (req, res) => {
 
     await vote.response.then((r) => res.json(r));
   } catch (e) {
+    console.error(e);
     res.status(404).json(VoteResponse.messages[404]);
   }
 });
