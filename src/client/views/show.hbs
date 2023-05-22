@@ -1,3 +1,44 @@
 <div class="py-12">
-
+  <canvas id="chart" x-data="chart()" x-init="init"></canvas>
+  <form action="/vote/lack/{{ poll.token }}" method="post">
+  </form>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('chart');
+
+  function chart() {
+    return {
+      token: "{{ poll.token }}",
+      result: {},
+      async init() {
+        await fetch("/poll/lack/" + this.token,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+            },
+          })
+          .then(async (res) => {
+            this.result = await res.json();
+            return this.result;
+          })
+          .then((res) => {
+            console.log(this.result.options.map((o) => o));
+            new Chart(ctx, {
+              type: 'pie',
+              data: {
+                labels: this.result.poll.body.options.map((o) => o.text),
+                datasets: [{
+                  label: 'Votes',
+                  data: this.result.options.map((o) => o.voted.length),
+                  borderWidth: 1
+                }]
+              },
+            });
+          });
+      }
+    }
+  }
+</script>
