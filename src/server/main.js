@@ -16,7 +16,22 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
-app.engine(".hbs", engine({ extname: ".hbs" }));
+app.engine(
+  ".hbs",
+  engine({
+    extname: ".hbs",
+    helpers: {
+      pluralize: function (number, single, plural) {
+        if (number === 1) {
+          return single;
+        } else {
+          return plural;
+        }
+      },
+    },
+    runtimeOptions: { allowProtoPropertiesByDefault: true },
+  }),
+);
 app.set("view engine", ".hbs");
 app.set("views", "./src/client/views");
 app.use(router);
