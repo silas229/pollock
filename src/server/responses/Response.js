@@ -20,6 +20,14 @@ export default class Response {
       code: "200",
       message: "i.O.",
     },
+    401: {
+      code: 401,
+      message: "Unauthorized",
+    },
+    403: {
+      code: 403,
+      message: "Forbidden",
+    },
     405: {
       code: 405,
       message: "Invalid input",
