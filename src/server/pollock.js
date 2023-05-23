@@ -85,11 +85,25 @@ pollRouter.get("/:token", async (req, res) => {
       return;
     }
 
-    if (req.header("accept") === "text/html") {
-      // TODO: Send html
+    console.log(req.header("Accept"));
+    if (!req.header("Accept") || req.header("Accept") === "application/json") {
+      return await PollLockResponse.generate(poll).then((r) => res.json(r));
     }
 
-    await PollLockResponse.generate(poll).then((r) => res.json(r));
+    let votes = await poll.votes;
+    votes = await votes.map((v) => {
+      v.choice = v.choice.map((c) => {
+        c.text = poll.options.find((o) => o.id === c.id).text;
+        return c;
+      });
+      return v;
+    });
+
+    res.render("show", {
+      title: poll.title,
+      poll: poll,
+      votes: votes,
+    });
   } catch (e) {
     res.status(404).json(PollLockResponse.messages[404]);
   }
@@ -290,7 +304,7 @@ userRouter.post("/", async (req, res) => {
     }
 
     req.body.lock = true;
-    req.body.password = User.passwordHash(req.body.password);
+    req.body.password = await User.passwordHash(req.body.password);
 
     const user = new User(req.body);
     user.save();
