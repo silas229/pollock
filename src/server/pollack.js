@@ -19,7 +19,7 @@ lack.use(VoteResponse.base, voteRouter);
 
 pollRouter.get("/create", (req, res) => {
   res.render("create", {
-    title: "New Poll",
+    title: "New Anonymous Poll",
   });
 });
 
