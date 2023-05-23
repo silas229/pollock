@@ -9,8 +9,7 @@ export const isAuthenticated = async (req, res, next) => {
   if (!req.header("Accept") || req.header("Accept") === "application/json") {
     return validateApiKey(req, res, next);
   } else {
-    if (req.session && req.session.user) {
-      req.user = await User.getByName(req.session.user);
+    if (req.session && req.user) {
       // User is authenticated
       next();
     } else {
@@ -55,4 +54,25 @@ export const authorizeByCredentials = async (req, res, next) => {
   } catch (e) {
     return res.status(401).json(Response.messages[401]);
   }
+};
+
+export const checkAcceptsHeader = async (req, res, next) => {
+  req.expectsJson =
+    !req.header("Accept") || req.header("Accept") === "application/json";
+
+  next();
+};
+
+export const getUser = async (req, res, next) => {
+  if (!req.session || !req.session.user) {
+    req.user = null;
+  } else {
+    try {
+      req.user = await User.getByName(req.session.user);
+    } catch (e) {
+      req.user = null;
+    }
+  }
+
+  next();
 };

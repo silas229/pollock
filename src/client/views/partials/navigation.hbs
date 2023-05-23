@@ -23,10 +23,6 @@
           </a>
           {{else}}
           <a class="inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 text-gray-500 transition duration-150 ease-in-out border-b-2 border-transparent dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700"
-            href="/poll/lack/create">
-            New Anonymous Poll
-          </a>
-          <a class="inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 text-gray-500 transition duration-150 ease-in-out border-b-2 border-transparent dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700"
             href="/login">
             Login
           </a>
@@ -35,12 +31,19 @@
             Register
           </a>
           {{/if}}
+          <a class="inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 text-gray-500 transition duration-150 ease-in-out border-b-2 border-transparent dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700"
+            href="/poll/lack/create">
+            New Anonymous Poll
+          </a>
         </div>
       </div>
 
       {{#if user}}
       <!-- Settings Dropdown -->
-      <form method="POST" action="/logout" class="hidden sm:flex sm:items-center sm:ml-6">
+      <form method="POST" action="/logout" class="hidden space-x-8 sm:flex sm:items-center sm:-my-px sm:ml-10">
+        <p class="inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 text-gray-500 dark:text-gray-400">
+          Logged
+          in as <span class="pl-1 text-black dark:text-white">{{user.name}}</span></p>
         <button type="submit"
           class="inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 text-gray-500 transition duration-150 ease-in-out border-b-2 border-transparent dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700">
           Log out
