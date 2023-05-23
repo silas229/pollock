@@ -1,11 +1,11 @@
 _id: req_wrk_5e5bfa2874bd44b59a2f2a06f71735c3b925fd41
 type: Request
 parentId: fld_wrk_5e5bfa2874bd44b59a2f2a06f71735c3fd63f1ed
-modified: 1684853846944
+modified: 1684882826177
 created: 1682647010397
 url: "{{ base_url }}/vote/lock/{% response 'body',
-  'req_wrk_5e5bfa2874bd44b59a2f2a06f71735c3ca88318f',
-  'b64::JC5zaGFyZS52YWx1ZQ==::46b', 'never', 60 %}"
+  'req_wrk_5e5bfa2874bd44b59a2f2a06f71735c3670d68fd',
+  'b64::JC5lZGl0LnZhbHVl::46b', 'never', 60 %}"
 name: Find the vote of the token
 description: ""
 method: GET

@@ -1,9 +1,11 @@
 _id: req_wrk_5e5bfa2874bd44b59a2f2a06f71735c303078c11
 type: Request
 parentId: fld_wrk_5e5bfa2874bd44b59a2f2a06f71735c3fd63f1ed
-modified: 1682647010396
+modified: 1684882883839
 created: 1682647010396
-url: "{{ base_url }}/vote/lock/{{ token }}"
+url: "{{ base_url }}/vote/lock/{% response 'body',
+  'req_wrk_5e5bfa2874bd44b59a2f2a06f71735c3670d68fd',
+  'b64::JC5lZGl0LnZhbHVl::46b', 'never', 60 %}"
 name: Update a vote of the token
 description: ""
 method: PUT

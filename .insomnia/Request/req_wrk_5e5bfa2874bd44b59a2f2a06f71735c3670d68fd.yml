@@ -1,7 +1,7 @@
 _id: req_wrk_5e5bfa2874bd44b59a2f2a06f71735c3670d68fd
 type: Request
 parentId: fld_wrk_5e5bfa2874bd44b59a2f2a06f71735c3fd63f1ed
-modified: 1684853884062
+modified: 1684882793769
 created: 1682647010397
 url: "{{ base_url }}/vote/lock/{% response 'body',
   'req_wrk_5e5bfa2874bd44b59a2f2a06f71735c3ca88318f',
@@ -14,7 +14,7 @@ body:
   text: |-
     {
       "owner": {
-    		"name": "user"
+    		"name": "user2"
     	},
       "choice": [
         {
