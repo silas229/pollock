@@ -57,8 +57,9 @@ export const authorizeByCredentials = async (req, res, next) => {
 };
 
 export const checkAcceptsHeader = async (req, res, next) => {
+  const apiTypes = ["application/json", "*/*"];
   req.expectsJson =
-    !req.header("Accept") || req.header("Accept") === "application/json";
+    !req.header("Accept") || apiTypes.includes(req.header("Accept"));
 
   next();
 };
