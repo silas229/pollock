@@ -59,7 +59,7 @@ class Poll extends Model {
 
     this.owner = owner;
     this.users = users;
-    this.visibility = visibility;
+    this.visibility = users.length == 0 ? visibility : "lock";
   }
 
   static get rules() {
@@ -138,8 +138,7 @@ class Poll extends Model {
       (votes) =>
         votes.map((v) => {
           const vote = new Vote(v);
-          vote.owner.password = undefined;
-          vote.owner.token = undefined;
+          vote.owner = { name: vote.owner };
           return vote;
         }),
       [],
