@@ -48,13 +48,9 @@ export default class UserController {
 
   static async key(req, res) {
     try {
-      const user = await User.getByCredentials(
-        req.body.name,
-        req.body.password,
-      );
-      return res.json((await user.createApiToken())._id);
+      return res.json((await res.locals.user.createApiToken())._id);
     } catch (e) {
-      return res.status(401).json(UserResponse.messages[401]);
+      return res.status(500).json(UserResponse.messages[500]);
     }
   }
 
@@ -73,6 +69,7 @@ export default class UserController {
       const user = await User.getByName(req.params.name, true);
 
       await user.delete();
+
       return res.status(200).json(UserResponse.messages[200]);
     } catch (e) {
       return res.status(400).json(UserResponse.messages[404]);

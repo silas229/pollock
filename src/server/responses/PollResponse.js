@@ -29,10 +29,12 @@ export default class PollResponse extends Response {
     const token = body.token;
 
     // Remove properties that are not in spec
-    body.token = undefined;
-    body.admin_token = undefined;
+    delete body.token;
+    delete body.admin_token;
 
-    body.security = undefined;
+    delete body.owner;
+    delete body.users;
+    delete body.visibility;
 
     return {
       poll: {

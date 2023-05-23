@@ -60,12 +60,7 @@ export default class PollController {
 
   static async show(req, res) {
     try {
-      const poll = await Poll.getByToken(req.params.token);
-
-      if (!poll.is_open) {
-        res.status(410).json(PollResponse.messages[410]);
-        return;
-      }
+      const poll = req.poll;
 
       if (req.expectsJson) {
         await poll.response.then((r) => res.json(r));
@@ -88,13 +83,13 @@ export default class PollController {
       });
     } catch (e) {
       console.error(e);
-      res.status(404).json(PollResponse.messages[404]);
+      res.status(500).json(PollResponse.messages[500]);
     }
   }
 
   static async edit(req, res) {
     try {
-      const poll = await Poll.getByAdminToken(req.params.token);
+      const poll = req.poll;
 
       res.render("lack/poll/edit", {
         title: "Edit: " + poll.title,
@@ -102,60 +97,51 @@ export default class PollController {
         poll: poll,
       });
     } catch (e) {
-      res.status(404).json(PollResponse.messages[404]);
+      res.status(500).json(PollResponse.messages[500]);
     }
   }
 
   static async update(req, res) {
     try {
-      const admin_token = req.params.token;
-      let poll = await Poll.getByAdminToken(admin_token);
+      let poll = req.poll;
+      Object.assign(poll, req.body);
+      const validation = new Validator(poll, Poll.rules);
 
-      try {
-        Object.assign(poll, req.body);
-        const validation = new Validator(poll, Poll.rules);
+      Validator.register(
+        "poll_number_of_voices",
+        (value) => {
+          return value <= req.body.options.length;
+        },
+        "The number of votes may not be higher than the number of options.",
+      );
 
-        Validator.register(
-          "poll_number_of_voices",
-          (value) => {
-            return value <= req.body.options.length;
-          },
-          "The number of votes may not be higher than the number of options.",
-        );
+      if (validation.fails()) {
+        res
+          .status(405)
+          .json(
+            Object.assign(
+              { errors: validation.errors.all() },
+              PollResponse.messages[405],
+            ),
+          );
 
-        if (validation.fails()) {
-          res
-            .status(405)
-            .json(
-              Object.assign(
-                { errors: validation.errors.all() },
-                PollResponse.messages[405],
-              ),
-            );
-
-          return;
-        }
-
-        poll.save().then(() => res.json(PollResponse.messages[200]));
-      } catch (e) {
-        console.error(e);
-        res.status(405).json(PollResponse.messages[405]);
+        return;
       }
+
+      poll.save().then(() => res.json(PollResponse.messages[200]));
     } catch (e) {
-      res.status(404).json(PollResponse.messages[404]);
+      console.error(e);
+      res.status(405).json(PollResponse.messages[405]);
     }
   }
 
   static async destroy(req, res) {
     try {
-      const admin_token = req.params.token;
-      const poll = await Poll.getByAdminToken(admin_token);
-
-      poll.delete();
+      await req.poll.delete();
 
       res.status(200).json(PollResponse.messages[200]);
     } catch (e) {
-      res.status(404).json(PollResponse.messages[404]);
+      res.status(500).json(PollResponse.messages[500]);
     }
   }
 }

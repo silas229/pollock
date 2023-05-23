@@ -102,6 +102,8 @@ class Poll extends Model {
    * @returns {Promise<number>}
    */
   async delete() {
+    Vote.db.removeAsync({ poll_token: this.token }, { multi: true });
+
     return Poll.db.removeAsync(
       { admin_token: this.admin_token },
       { multi: false },
@@ -137,9 +139,7 @@ class Poll extends Model {
     return Vote.db.find({ poll_token: this.token }).then(
       (votes) =>
         votes.map((v) => {
-          const vote = new Vote(v);
-          vote.owner = { name: vote.owner };
-          return vote;
+          return new Vote(v);
         }),
       [],
     );
@@ -154,7 +154,7 @@ class Poll extends Model {
 
   /**
    * @param {String} token Poll token
-   * @returns {Poll}
+   * @returns {Promise<Poll>}
    */
   static async getByToken(token) {
     return new Poll(await Poll.db.findOneAsync({ _id: token }));

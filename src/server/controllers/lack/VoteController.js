@@ -1,74 +1,67 @@
 "use strict";
 
 import Vote from "../../models/Vote.js";
-import Poll from "../../models/Poll.js";
 import Validator from "validatorjs";
 import VoteResponse from "../../responses/VoteResponse.js";
-import PollResponse from "../../responses/PollResponse.js";
 
 export default class VoteController {
   static async store(req, res) {
     try {
-      const poll = await Poll.getByToken(req.params.token);
+      const poll = req.poll;
 
-      try {
-        if (res.locals.user) {
-          req.body.owner = await res.locals.user.response;
-        }
-
-        Validator.register(
-          "poll_valid_option",
-          (value) => {
-            return poll.options.find((o) => o.id === value);
-          },
-          "Choice :attribute is not a valid option for this poll.",
-        );
-
-        Validator.register(
-          "poll_worst_allowed",
-          (value) => !value || poll.setting.worst === true,
-          "'Worst' is not allowed for this poll.",
-        );
-
-        const validation = new Validator(req.body, Vote.rules);
-
-        if (validation.fails()) {
-          res
-            .status(405)
-            .json(
-              Object.assign(
-                { errors: validation.errors.all() },
-                VoteResponse.messages[405],
-              ),
-            );
-          // Alternatively: (to hide errors and comply to spec)
-          // throw new Error("Validation Error");
-
-          return;
-        }
-
-        req.body.poll_token = poll.token;
-        req.body.owner = req.body.owner.name;
-
-        new Vote(req.body).save().then((vote) =>
-          res.json({
-            edit: {
-              link: VoteResponse.getLink(vote._id),
-              value: vote._id,
-            },
-          }),
-        );
-      } catch (e) {
-        res.status(405).json(VoteResponse.messages[405]);
+      if (res.locals.user) {
+        req.body.owner = res.locals.user.name;
       }
+
+      Validator.register(
+        "poll_valid_option",
+        (value) => {
+          return poll.options.find((o) => o.id === value);
+        },
+        "Choice :attribute is not a valid option for this poll.",
+      );
+
+      Validator.register(
+        "poll_worst_allowed",
+        (value) => !value || poll.setting.worst === true,
+        "'Worst' is not allowed for this poll.",
+      );
+
+      const validation = new Validator(req.body, Vote.rules);
+
+      if (validation.fails()) {
+        res
+          .status(405)
+          .json(
+            Object.assign(
+              { errors: validation.errors.all() },
+              VoteResponse.messages[405],
+            ),
+          );
+        // Alternatively: (to hide errors and comply to spec)
+        // throw new Error("Validation Error");
+
+        return;
+      }
+
+      req.body.poll_token = poll.token;
+
+      new Vote(req.body).save().then((vote) =>
+        res.json({
+          edit: {
+            link: VoteResponse.getLink(vote._id),
+            value: vote._id,
+          },
+        }),
+      );
     } catch (e) {
-      res.status(404).json(PollResponse.messages[404]);
+      res.status(405).json(VoteResponse.messages[405]);
     }
   }
 
   static async show(req, res) {
     try {
-      const vote = await Vote.getByToken(req.params.token);
+      const vote = req.vote;
 
       if (req.expectsJson) {
         await vote.response.then((r) => res.json(r));
@@ -78,58 +71,56 @@ export default class VoteController {
       res.send();
     } catch (e) {
       console.error(e);
-      res.status(404).json(VoteResponse.messages[404]);
+      res.status(500).json(VoteResponse.messages[500]);
     }
-  }
-
-  static async edit(req, res) {
-    //TODO
   }
 
   static async update(req, res) {
     try {
-      const vote = await Vote.getByToken(req.params.token);
+      const vote = req.vote;
       const poll = await vote.poll;
 
-      try {
-        Validator.register(
-          "poll_valid_option",
-          (value) => {
-            return poll.options.find((o) => o.id === value);
-          },
-          "Choice :attribute is not a valid option for this poll.",
-        );
-
-        Validator.register(
-          "poll_worst_allowed",
-          (value) => !value || poll.setting.worst === true,
-          "'Worst' is not allowed for this poll.",
-        );
-
-        Object.assign(vote, req.body);
-        const validation = new Validator(vote, Vote.rules);
-
-        if (validation.fails()) {
-          res
-            .status(405)
-            .json(
-              Object.assign(
-                { errors: validation.errors.all() },
-                VoteResponse.messages[405],
-              ),
-            );
-          // Alternatively: (to hide errors and comply to spec)
-          // throw new Error("Validation Error");
-
-          return;
-        }
-
-        vote.save().then(() => res.json(VoteResponse.messages[200]));
-      } catch (e) {
-        res.status(405).json(VoteResponse.messages[405]);
+      if (res.locals.user) {
+        req.body.owner = res.locals.user.name;
+      } else if (req.body?.owner?.name) {
+        req.body.owner = req.body.owner.name;
       }
+
+      Validator.register(
+        "poll_valid_option",
+        (value) => {
+          return poll.options.find((o) => o.id === value);
+        },
+        "Choice :attribute is not a valid option for this poll.",
+      );
+
+      Validator.register(
+        "poll_worst_allowed",
+        (value) => !value || poll.setting.worst === true,
+        "'Worst' is not allowed for this poll.",
+      );
+
+      Object.assign(vote, req.body);
+      const validation = new Validator(vote, Vote.rules);
+
+      if (validation.fails()) {
+        res
+          .status(405)
+          .json(
+            Object.assign(
+              { errors: validation.errors.all() },
+              VoteResponse.messages[405],
+            ),
+          );
+        // Alternatively: (to hide errors and comply to spec)
+        // throw new Error("Validation Error");
+
+        return;
+      }
+
+      vote.save().then(() => res.json(VoteResponse.messages[200]));
     } catch (e) {
-      res.status(404).json(VoteResponse.messages[404]);
+      res.status(405).json(VoteResponse.messages[405]);
     }
   }
 

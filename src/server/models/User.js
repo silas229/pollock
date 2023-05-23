@@ -56,6 +56,7 @@ class User extends Model {
    * @returns {Promise<number>}
    */
   async delete() {
+    User.apiKeyDB.removeAsync({ user: this.name }, { multi: true });
     return User.db.removeAsync({ _id: this.token }, { multi: false });
   }
 
@@ -95,13 +96,24 @@ class User extends Model {
   canAccessPoll(poll) {
     if (poll.visibility == "lock") {
       if (poll.users.length > 0) {
-        if (this.name != poll.owner || !poll.users.includes(this.name)) {
+        if (this.name != poll.owner && !poll.users.includes(this.name)) {
           return false;
         }
       }
     }
 
     return true;
+  }
+
+  /**
+   *
+   * @param {Poll} poll
+   * @param {User} user Current user
+   *
+   * @returns boolean
+   */
+  canChangePoll(poll) {
+    return poll.owner === this.name || poll.users.includes(this.name);
   }
 
   /**

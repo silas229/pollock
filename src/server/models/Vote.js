@@ -55,7 +55,7 @@ export default class Vote extends Model {
 
   static get rules() {
     return {
-      "owner.name": "required|string",
+      owner: "required|string",
       choice: "required|array",
       "choice.*.id": "required|integer|poll_valid_option",
       "choice.*.worst": "boolean|poll_worst_allowed",
