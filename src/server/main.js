@@ -12,11 +12,11 @@ const app = express();
 export const port = 49725;
 export const baseUrl = "http://" + ip.address() + ":" + port;
 
-app.use(express.static("public"));
 app.get(cors());
+app.use(express.static("public"));
 app.use(checkAcceptsHeader);
-app.use(xss());
 app.use(express.json());
+app.use(xss());
 app.use(
   session({
     secret: "HnUJpFtpHumrE4WmgVqfbWuDnev72EvJjCmPDemphHZYpXjTjTuVcbXCsjm5pTdj",
