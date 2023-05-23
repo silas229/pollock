@@ -63,7 +63,7 @@ class User extends Model {
    * @type {Promise<Poll[]>}
    */
   get polls() {
-    return Poll.db.find({ owner_token: this.token }).then(
+    return Poll.db.find({ owner: this.name }).then(
       (polls) =>
         polls.map((p) => {
           const poll = new Poll(p);
