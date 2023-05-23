@@ -24,7 +24,7 @@ export default class Vote extends Model {
     super();
     this.token = token ?? _id;
     this.poll_token = poll_token;
-    this.owner = new User(owner);
+    this.owner = owner;
 
     this.choice = [];
     choice.forEach((c) => this.choice.push(new Choice(c)));
@@ -44,6 +44,13 @@ export default class Vote extends Model {
    */
   async delete() {
     return Vote.db.removeAsync({ _id: this.token }, { multi: false });
+  }
+
+  /**
+   * @returns {Promise<User>}
+   */
+  async getOwner() {
+    return await User.getByName(this.owner);
   }
 
   static get rules() {

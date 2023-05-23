@@ -27,7 +27,7 @@ export default class VoteResponse extends Response {
     body.poll_token = undefined;
     body.time = undefined;
 
-    body.owner = await body.owner.response;
+    body.owner = await (await body.getOwner()).response;
 
     return {
       poll: (await poll.response).poll,
