@@ -1,6 +1,7 @@
 "use strict";
 
-import Vote from "../../models/Poll.js";
+import Vote from "../../models/Vote.js";
+import Poll from "../../models/Poll.js";
 import Validator from "validatorjs";
 import VoteResponse from "../../responses/VoteResponse.js";
 import PollResponse from "../../responses/PollResponse.js";
@@ -11,6 +12,10 @@ export default class VoteController {
       const poll = await Poll.getByToken(req.params.token);
 
       try {
+        if (res.locals.user) {
+          req.body.owner = await res.locals.user.response;
+        }
+
         Validator.register(
           "poll_valid_option",
           (value) => {
@@ -43,6 +48,7 @@ export default class VoteController {
         }
 
         req.body.poll_token = poll.token;
+        req.body.owner = req.body.owner.name;
 
         new Vote(req.body).save().then((vote) =>
           res.json({
@@ -69,6 +75,7 @@ export default class VoteController {
       }
 
       // TODO: Send html
+      res.send();
     } catch (e) {
       console.error(e);
       res.status(404).json(VoteResponse.messages[404]);
