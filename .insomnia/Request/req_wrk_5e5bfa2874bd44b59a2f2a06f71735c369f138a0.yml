@@ -1,9 +1,11 @@
 _id: req_wrk_5e5bfa2874bd44b59a2f2a06f71735c369f138a0
 type: Request
 parentId: fld_wrk_5e5bfa2874bd44b59a2f2a06f71735c34b687891
-modified: 1684840674864
+modified: 1684882632206
 created: 1682647010405
-url: "{{ base_url }}/poll/lock/{{ token }}"
+url: "{{ base_url }}/poll/lock/{% response 'body',
+  'req_wrk_5e5bfa2874bd44b59a2f2a06f71735c3ca88318f',
+  'b64::JC5hZG1pbi52YWx1ZQ==::46b', 'no-history', 60 %}"
 name: Update a poll
 description: ""
 method: PUT
@@ -17,6 +19,10 @@ body:
         {
           "id": 0,
           "text": "string"
+        },
+    		{
+          "id": 0,
+          "text": "string2"
         }
       ],
       "setting": {
