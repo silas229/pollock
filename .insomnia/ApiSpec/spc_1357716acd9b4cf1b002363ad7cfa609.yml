@@ -1,7 +1,7 @@
 _id: spc_1357716acd9b4cf1b002363ad7cfa609
 type: ApiSpec
 parentId: wrk_5e5bfa2874bd44b59a2f2a06f71735c3
-modified: 1682647084940
+modified: 1684593361725
 created: 1682647015057
 fileName: Pollock 1.0.0
 contents: >
@@ -19,7 +19,7 @@ contents: >
       The name is composed of **poll** and **lock** and is the name of a fish, the [pollock](https://en.wikipedia.org/wiki/Pollock). A special thing about this fish is that it is also called **pollack**. If _Pollock_ was implemented without registration, then it would therefore be called _Pollack_, because registration is lacking.
     version: 1.0.0
   servers:
-    - url: 'http://localhost:49725/api'
+    - url: 'http://localhost:49725'
   tags:
     - name: poll
       description: Everything about a poll

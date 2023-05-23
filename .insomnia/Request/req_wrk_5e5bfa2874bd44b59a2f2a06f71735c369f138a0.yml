@@ -1,7 +1,7 @@
 _id: req_wrk_5e5bfa2874bd44b59a2f2a06f71735c369f138a0
 type: Request
 parentId: fld_wrk_5e5bfa2874bd44b59a2f2a06f71735c34b687891
-modified: 1682647010405
+modified: 1684840674864
 created: 1682647010405
 url: "{{ base_url }}/poll/lock/{{ token }}"
 name: Update a poll
@@ -9,7 +9,36 @@ description: ""
 method: PUT
 body:
   mimeType: application/json
-  text: "null"
+  text: |-
+    {
+      "title": "What is your favorite color?",
+      "description": "<script>alert(1)</script>",
+      "options": [
+        {
+          "id": 0,
+          "text": "string"
+        }
+      ],
+      "setting": {
+        "voices": 0,
+        "worst": true,
+        "deadline": "2023-05-29T19:21:39+02:00"
+      },
+      "fixed": [
+        0
+      ],
+    	"owner": {
+    		"name": "test",
+    		"lock": true
+    	},
+    	"users": [
+    		{
+    			"name": "user",
+    			"lock": true
+    		}
+    	],
+    	"visibility": "lock"
+    }
 parameters: []
 headers:
   - name: Content-Type

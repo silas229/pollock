@@ -1,7 +1,7 @@
 _id: req_wrk_5e5bfa2874bd44b59a2f2a06f71735c36270054a1
 type: Request
 parentId: fld_wrk_5e5bfa2874bd44b59a2f2a06f71735c3d6658a9d
-modified: 1684050298486
+modified: 1684779078559
 created: 1682647010399
 url: "{{ base_url }}/vote/lack/{% response 'body',
   'req_wrk_5e5bfa2874bd44b59a2f2a06f71735c3cb2c75351',
@@ -15,8 +15,12 @@ body:
     {
       "choice": [
         {
-          "id": 0
-        }
+          "id": 0,
+    			"worst": true
+        },
+    		{
+    			"id": 1
+    		}
       ]
     }
 parameters: []

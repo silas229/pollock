@@ -1,9 +1,11 @@
 _id: req_wrk_5e5bfa2874bd44b59a2f2a06f71735c3b925fd41
 type: Request
 parentId: fld_wrk_5e5bfa2874bd44b59a2f2a06f71735c3fd63f1ed
-modified: 1682647010397
+modified: 1684853846944
 created: 1682647010397
-url: "{{ base_url }}/vote/lock/{{ token }}"
+url: "{{ base_url }}/vote/lock/{% response 'body',
+  'req_wrk_5e5bfa2874bd44b59a2f2a06f71735c3ca88318f',
+  'b64::JC5zaGFyZS52YWx1ZQ==::46b', 'never', 60 %}"
 name: Find the vote of the token
 description: ""
 method: GET
@@ -15,7 +17,7 @@ authentication:
   key: API-KEY
   value: "{{ apiKey }}"
   addTo: header
-metaSortKey: -1682647010397
+metaSortKey: -1682647010396.375
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

@@ -1,7 +1,7 @@
 _id: req_wrk_5e5bfa2874bd44b59a2f2a06f71735c338e8e88f
 type: Request
 parentId: fld_wrk_5e5bfa2874bd44b59a2f2a06f71735c312dea96f
-modified: 1682647010383
+modified: 1684841270806
 created: 1682647010383
 url: "{{ base_url }}/user/{{ username }}"
 name: Delete user
@@ -9,7 +9,11 @@ description: ""
 method: DELETE
 body: {}
 parameters: []
-headers: []
+headers:
+  - id: pair_1e1b2d0d983f4777be1433b7a52821bc
+    name: Accept
+    value: application/json
+    description: ""
 authentication:
   type: apikey
   key: API-KEY

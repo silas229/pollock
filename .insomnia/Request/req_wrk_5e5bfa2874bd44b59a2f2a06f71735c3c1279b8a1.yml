@@ -1,7 +1,7 @@
 _id: req_wrk_5e5bfa2874bd44b59a2f2a06f71735c3c1279b8a1
 type: Request
 parentId: fld_wrk_5e5bfa2874bd44b59a2f2a06f71735c3d6658a9d
-modified: 1684329464607
+modified: 1684709409524
 created: 1682647010411
 url: "{{ base_url }}/poll/lack"
 name: Add a new poll.
@@ -32,6 +32,8 @@ parameters: []
 headers:
   - name: Content-Type
     value: application/json
+    id: pair_1933739a69c14e79b2f736b469beec8e
+    disabled: false
 authentication: {}
 metaSortKey: -1682647010411
 isPrivate: false

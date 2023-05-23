@@ -1,7 +1,7 @@
 _id: req_wrk_5e5bfa2874bd44b59a2f2a06f71735c3fe3d55d0
 type: Request
 parentId: fld_wrk_5e5bfa2874bd44b59a2f2a06f71735c312dea96f
-modified: 1682647010392
+modified: 1684856386791
 created: 1682647010392
 url: "{{ base_url }}/user"
 name: Create user
@@ -11,8 +11,8 @@ body:
   mimeType: application/json
   text: |-
     {
-      "name": "string",
-      "password": "string"
+      "name": "{{ _.username }}",
+      "password": "{{ _.password }}"
     }
 parameters: []
 headers:

@@ -1,9 +1,11 @@
 _id: req_wrk_5e5bfa2874bd44b59a2f2a06f71735c3f672f21e
 type: Request
 parentId: fld_wrk_5e5bfa2874bd44b59a2f2a06f71735c34b687891
-modified: 1682647010405
+modified: 1684788556048
 created: 1682647010405
-url: "{{ base_url }}/poll/lock/{{ token }}"
+url: "{{ base_url }}/poll/lock/{% response 'body',
+  'req_wrk_5e5bfa2874bd44b59a2f2a06f71735c3ca88318f',
+  'b64::JC5zaGFyZS52YWx1ZQ==::46b', 'no-history', 60 %}"
 name: Find statistics of a poll by token.
 description: ""
 method: GET

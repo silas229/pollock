@@ -1,7 +1,7 @@
 _id: env_env_4cda1b8e86c5620df227574632f95108e5ef5ca7_sub__77b5f8e3
 type: Environment
 parentId: env_4cda1b8e86c5620df227574632f95108e5ef5ca7
-modified: 1682677611330
+modified: 1684792000946
 created: 1682647010415
 name: local
 data:
@@ -9,8 +9,11 @@ data:
     - http
   base_path: ""
   host: localhost:49725
-  apiKey: apiKey
-  token: tubPIn1UEwWrIAZi
+  apiKey: "{% response 'body', 'req_wrk_5e5bfa2874bd44b59a2f2a06f71735c376948d79',
+    'b64::JA==::46b', 'no-history', 60 %}"
+  token: ""
+  username: user
+  password: pass
 dataPropertyOrder:
   "&":
     - scheme
@@ -18,6 +21,8 @@ dataPropertyOrder:
     - host
     - apiKey
     - token
+    - username
+    - password
 color: null
 isPrivate: false
 metaSortKey: 1682647010415

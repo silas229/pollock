@@ -1,7 +1,7 @@
 _id: req_wrk_5e5bfa2874bd44b59a2f2a06f71735c3ba1867451
 type: Request
 parentId: fld_wrk_5e5bfa2874bd44b59a2f2a06f71735c3d6658a9d
-modified: 1684329529304
+modified: 1684832437979
 created: 1682647010410
 url: "{{ base_url }}/poll/lack/{% request 'parameter', 'token', 0 %}"
 name: Find statistics of a poll by token.
@@ -15,7 +15,11 @@ parameters:
       'b64::JC5zaGFyZS52YWx1ZQ==::46b', 'never', 60 %}"
     description: ""
     disabled: true
-headers: []
+headers:
+  - id: pair_cb581fd2b6b84697aa833eb1d420d526
+    name: accept
+    value: application/json
+    description: ""
 authentication: {}
 metaSortKey: -1682647010410
 isPrivate: false

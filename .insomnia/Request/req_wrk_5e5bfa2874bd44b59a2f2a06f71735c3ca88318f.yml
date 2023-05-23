@@ -1,7 +1,7 @@
 _id: req_wrk_5e5bfa2874bd44b59a2f2a06f71735c3ca88318f
 type: Request
 parentId: fld_wrk_5e5bfa2874bd44b59a2f2a06f71735c34b687891
-modified: 1682647010406
+modified: 1684837647522
 created: 1682647010406
 url: "{{ base_url }}/poll/lock"
 name: Add a new poll.
@@ -9,11 +9,49 @@ description: ""
 method: POST
 body:
   mimeType: application/json
-  text: "null"
-parameters: []
+  text: |-
+    {
+      "title": "What is your favorite color?",
+      "description": "<script>alert(1)</script>",
+      "options": [
+        {
+          "id": 0,
+          "text": "string"
+        }
+      ],
+      "setting": {
+        "voices": 0,
+        "worst": true,
+        "deadline": "2023-05-29T19:21:39+02:00"
+      },
+      "fixed": [
+        0
+      ],
+    	"owner": {
+    		"name": "test",
+    		"lock": true
+    	},
+    	"users": [
+    		{
+    			"name": "user",
+    			"lock": true
+    		}
+    	],
+    	"visibility": "lock"
+    }
+parameters:
+  - id: pair_545d99fae85b46df9d62873b6f1d9c08
+    name: ""
+    value: ""
+    description: ""
 headers:
   - name: Content-Type
     value: application/json
+    id: pair_5e994da01981476a812cefc805d3c402
+  - id: pair_294f2d0b65094a9b99ba92ff33d4c9ea
+    name: Accept
+    value: application/json
+    description: ""
 authentication:
   type: apikey
   key: API-KEY
