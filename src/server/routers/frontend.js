@@ -12,7 +12,7 @@ const frontend = Router();
 frontend.use(bodyParser.urlencoded({ extended: true }));
 
 frontend.get("/", isAuthenticated, async (req, res) => {
-  const polls = await (await User.getByName(res.locals.user.name)).polls;
+  const polls = await res.locals.user.polls;
   polls.map(async (p) => (p.numVotes = (await p.votes).length));
 
   res.render("index", {
