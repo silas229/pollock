@@ -27,7 +27,7 @@ lock.use("/user", userRouter);
 
 pollRouter.post("/", isAuthenticated, async (req, res) => {
   try {
-    req.body.owner = req.user.name;
+    req.body.owner = res.locals.user.name;
     if (req.body.users) {
       req.body.users = req.body.users.map((u) => u.name);
     }

@@ -17,7 +17,6 @@ frontend.get("/", isAuthenticated, async (req, res) => {
 
   res.render("index", {
     title: "Your polls",
-    user: req.user,
     polls: polls,
   });
 });

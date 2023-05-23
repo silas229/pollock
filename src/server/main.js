@@ -12,9 +12,9 @@ const app = express();
 export const port = 49725;
 export const baseUrl = "http://" + ip.address() + ":" + port;
 
+app.use(express.static("public"));
 app.get(cors());
 app.use(checkAcceptsHeader);
-app.use(getUser);
 app.use(xss());
 app.use(express.json());
 app.use(
@@ -24,8 +24,7 @@ app.use(
     saveUninitialized: true,
   }),
 );
-
-app.use(express.static("public"));
+app.use(getUser);
 
 app.engine(
   ".hbs",

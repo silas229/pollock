@@ -82,7 +82,6 @@ export default class PollController {
       });
 
       res.render("show", {
-        user: req.user,
         title: poll.title,
         poll: poll,
         votes: votes,

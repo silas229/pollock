@@ -9,7 +9,7 @@ export const isAuthenticated = async (req, res, next) => {
   if (!req.header("Accept") || req.header("Accept") === "application/json") {
     return validateApiKey(req, res, next);
   } else {
-    if (req.session && req.user) {
+    if (req.session && res.locals.user) {
       // User is authenticated
       next();
     } else {
@@ -37,7 +37,7 @@ export const validateApiKey = (req, res, next) => {
     }
 
     try {
-      req.user = await User.getByName(doc.user, true);
+      res.locals.user = await User.getByName(doc.user, true);
 
       // API key is valid, proceed to the next middleware
       next();
@@ -65,12 +65,12 @@ export const checkAcceptsHeader = async (req, res, next) => {
 
 export const getUser = async (req, res, next) => {
   if (!req.session || !req.session.user) {
-    req.user = null;
+    res.locals.user = null;
   } else {
     try {
-      req.user = await User.getByName(req.session.user);
+      res.locals.user = await User.getByName(req.session.user);
     } catch (e) {
-      req.user = null;
+      res.locals.user = null;
     }
   }
 
