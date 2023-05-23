@@ -7,7 +7,7 @@ import PollResponse from "../../responses/PollResponse.js";
 
 export default class PollController {
   static async create(req, res) {
-    res.render("create", {
+    res.render("lack/poll/create", {
       title: "New Anonymous Poll",
     });
   }
@@ -81,7 +81,7 @@ export default class PollController {
         return v;
       });
 
-      res.render("show", {
+      res.render("lack/poll/show", {
         title: poll.title,
         poll: poll,
         votes: votes,
@@ -96,7 +96,7 @@ export default class PollController {
     try {
       const poll = await Poll.getByAdminToken(req.params.token);
 
-      res.render("edit", {
+      res.render("lack/poll/edit", {
         title: "Edit: " + poll.title,
         admin_token: req.params.token,
         poll: poll,
