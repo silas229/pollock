@@ -1,5 +1,5 @@
-import PollResponse from "./PollResponse";
-import Poll from "../models/Poll";
+import PollResponse from "./PollResponse.js";
+import Poll from "../models/Poll.js";
 
 export default class PollLockResponse extends PollResponse {
   /**
@@ -28,12 +28,22 @@ export default class PollLockResponse extends PollResponse {
     body.token = undefined;
     body.admin_token = undefined;
 
+    const security = {
+      owner: await (await body.getOwner()).response,
+      users: await body.getUsers(),
+      visibility: body.visibility,
+    };
+    body.owner = undefined;
+    body.users = undefined;
+    body.visibility = undefined;
+
     return {
       poll: {
         body: body,
+        security: security,
         share: {
-          id: token,
-          link: PollResponse.getLink(token),
+          link: PollLockResponse.getLink(token),
+          value: token,
         },
       },
 

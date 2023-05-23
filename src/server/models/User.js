@@ -56,7 +56,7 @@ class User extends Model {
    * @returns {Promise<number>}
    */
   async delete() {
-    return User.db.removeAsync({ _id: this._id }, { multi: false });
+    return User.db.removeAsync({ _id: this.token }, { multi: false });
   }
 
   /**
@@ -95,10 +95,16 @@ class User extends Model {
 
   /**
    * @param {String} name Name
+   * @param {[boolean]} onlyLock Only get registered users
    * @returns {User}
    */
-  static async getByName(name) {
-    return new User(await User.db.findOneAsync({ name: name }));
+  static async getByName(name, onlyLock = false) {
+    const result = await User.db.findOneAsync({ name: name });
+    return new User(result ?? (onlyLock ? null : { name }));
+  }
+
+  static async exists(name) {
+    return (await User.db.findOneAsync({ name: name })) != null;
   }
 
   /**

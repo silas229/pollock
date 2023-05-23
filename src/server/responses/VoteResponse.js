@@ -1,6 +1,7 @@
 import Response from "./Response.js";
-import PollResponse from "./PollResponse.js";
 import Vote from "../models/Vote.js";
+import User from "../models/User.js";
+import Poll from "../models/Poll.js";
 
 export default class VoteResponse extends Response {
   /**
@@ -26,9 +27,11 @@ export default class VoteResponse extends Response {
     body.poll_token = undefined;
     body.time = undefined;
 
+    body.owner = await body.owner.response;
+
     return {
       poll: (await poll.response).poll,
-      vote: body, // TODO: Remove token, poll_token, time
+      vote: body,
       time: time,
     };
   }

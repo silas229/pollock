@@ -11,13 +11,16 @@ import Response from "./responses/Response.js";
 import { authorizeByCredentials, isAuthenticated } from "./middlewares.js";
 import User from "./models/User.js";
 import UserResponse from "./responses/UserResponse.js";
+import PollLockResponse from "./responses/PollLockResponse.js";
+import CredentialsError from "./errors/CredentialsError.js";
 
 const lock = Router(),
   pollRouter = Router(),
   voteRouter = Router(),
   userRouter = Router();
 
-lock.use("/poll/lock", pollRouter);
+lock.use(PollLockResponse.base, pollRouter);
+lock.use("/poll/null", pollRouter);
 lock.use("/vote/lock", voteRouter);
 lock.use("/user", userRouter);
 
@@ -25,7 +28,10 @@ lock.use("/user", userRouter);
 
 pollRouter.post("/", isAuthenticated, async (req, res) => {
   try {
-    console.log(req.body);
+    req.body.owner = req.user.name;
+    if (req.body.users) {
+      req.body.users = req.body.users.map((u) => u.name);
+    }
 
     Validator.register(
       "poll_number_of_voices",
@@ -35,7 +41,7 @@ pollRouter.post("/", isAuthenticated, async (req, res) => {
       "The number of votes may not be higher than the number of options.",
     );
 
-    const validation = new Validator(req.body, Poll.rules);
+    const validation = new Validator(req.body, Poll.lock_rules);
 
     if (validation.fails()) {
       res
@@ -55,7 +61,7 @@ pollRouter.post("/", isAuthenticated, async (req, res) => {
     new Poll(req.body).save().then((poll) =>
       res.json({
         admin: {
-          link: `${baseUrl + req.originalUrl}/${poll.admin_token}`,
+          link: `${baseUrl + req.originalUrl}/${poll.admin_token}/edit`,
           value: poll.admin_token,
         },
         share: {
@@ -65,6 +71,7 @@ pollRouter.post("/", isAuthenticated, async (req, res) => {
       }),
     );
   } catch (e) {
+    console.log(e);
     res.status(405).json(PollResponse.messages[405]);
   }
 });
@@ -74,7 +81,7 @@ pollRouter.get("/:token", async (req, res) => {
     const poll = await Poll.getByToken(req.params.token);
 
     if (!poll.is_open) {
-      res.status(410).json(PollResponse.messages[410]);
+      res.status(410).json(PollLockResponse.messages[410]);
       return;
     }
 
@@ -82,9 +89,9 @@ pollRouter.get("/:token", async (req, res) => {
       // TODO: Send html
     }
 
-    await poll.response.then((r) => res.json(r));
+    await PollLockResponse.generate(poll).then((r) => res.json(r));
   } catch (e) {
-    res.status(404).json(PollResponse.messages[404]);
+    res.status(404).json(PollLockResponse.messages[404]);
   }
 });
 
@@ -277,19 +284,18 @@ userRouter.post("/", async (req, res) => {
       // throw new Error("Validation Error");
     }
 
-    try {
-      await User.getByName(req.body.name);
-      // Return 400 if username is already reserved
-      res.status(400).json(UserResponse.messages[400]);
-    } catch (e) {
-      req.body.lock = true;
-      req.body.password = User.passwordHash(req.body.password);
-
-      const user = new User(req.body);
-      user.save();
-
-      return res.json((await user.createApiToken())._id);
+    if (await User.exists(req.body.name)) {
+      // Return 400 if already exists
+      return res.status(400).json(UserResponse.messages[400]);
     }
+
+    req.body.lock = true;
+    req.body.password = User.passwordHash(req.body.password);
+
+    const user = new User(req.body);
+    user.save();
+
+    return res.json((await user.createApiToken())._id);
   } catch (e) {
     console.error(e);
     res.status(405).json(Response.messages[405]);
@@ -307,7 +313,7 @@ userRouter.post("/key", async (req, res) => {
 
 userRouter.get("/:name", async (req, res) => {
   try {
-    const user = await User.getByName(req.params.name);
+    const user = await User.getByName(req.params.name, true);
 
     await user.response.then((r) => res.json(r));
   } catch (e) {
@@ -317,7 +323,13 @@ userRouter.get("/:name", async (req, res) => {
 
 userRouter.delete("/:name", isAuthenticated, async (req, res) => {
   try {
-  } catch (e) {}
+    const user = await User.getByName(req.params.name, true);
+
+    await user.delete();
+    return res.status(200).json(UserResponse.messages[200]);
+  } catch (e) {
+    return res.status(400).json(UserResponse.messages[404]);
+  }
 });
 
 export default lock;

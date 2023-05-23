@@ -4,6 +4,7 @@ import Vote from "./Vote.js";
 import { uid } from "@seald-io/nedb/lib/customUtils.js";
 import Model from "./Model.js";
 import Nedb from "@seald-io/nedb";
+import User from "./User.js";
 
 /**
  * @property {String} token
@@ -12,6 +13,9 @@ import Nedb from "@seald-io/nedb";
  * @property {Option[]} options
  * @property {{voices: Number, worst: Boolean, deadline: Date}} setting
  * @property {Number[]} fixed
+ * @property {String} owner
+ * @property {String[]} users
+ * @property {boolean} visibility
  */
 class Poll extends Model {
   static db = new Nedb({ filename: "./data/polls.db", autoload: true });
@@ -19,17 +23,20 @@ class Poll extends Model {
   /**
    * Constructs poll object
    *
-   * @param {{title: String, description: String, options: Array<{id: Number, text: String}>, setting: {voices: Number, worst: Boolean, deadline: String}, fixed: [Array<Number>], token: [String], admin_token: [String], _id: [String]}} param0 object
+   * @param {{title: String, description: String, options: Array<{id: Number, text: String}>, setting: {voices: Number, worst: Boolean, deadline: String}, fixed: [Array<Number>], _id: [String], token: [String], admin_token: [String], owner: [String], users: [Array<String>], visibility: [boolean]}} param0 object
    */
   constructor({
     title,
-    description,
+    description = "",
     options,
     setting,
-    fixed,
+    fixed = [],
     _id = null,
     token = null,
     admin_token = null,
+    owner = null,
+    users = [],
+    visibility = "lack",
   }) {
     super();
     this.token = token ?? _id;
@@ -48,7 +55,11 @@ class Poll extends Model {
       : null;
 
     // TODO: What means fixed?
-    this.fixed = fixed ?? [];
+    this.fixed = fixed;
+
+    this.owner = owner;
+    this.users = users;
+    this.visibility = visibility;
   }
 
   static get rules() {
@@ -69,7 +80,15 @@ class Poll extends Model {
   }
 
   static get lock_rules() {
-    return Object.assign({}, Poll.rules); // TODO lock rules
+    return Object.assign(
+      {
+        owner: "string",
+        users: "array",
+        "users.*": "string",
+        visibility: "string|in:lock,lack",
+      },
+      Poll.rules,
+    ); // TODO lock rules
   }
 
   /**
@@ -89,6 +108,24 @@ class Poll extends Model {
     );
   }
 
+  /**
+   * @returns {Promiise<User>} Poll owner
+   */
+  async getOwner() {
+    return await User.getByName(this.owner);
+  }
+
+  async getUsers() {
+    const result = [];
+
+    for (const u in this.users) {
+      const response = await (await User.getByName(this.users[u])).response;
+      result.push(response);
+    }
+
+    return result;
+  }
+
   get is_open() {
     return this.setting.deadline ? this.setting.deadline >= new Date() : true;
   }
@@ -102,6 +139,7 @@ class Poll extends Model {
         votes.map((v) => {
           const vote = new Vote(v);
           vote.owner.password = undefined;
+          vote.owner.token = undefined;
           return vote;
         }),
       [],

@@ -32,6 +32,8 @@ export default class PollResponse extends Response {
     body.token = undefined;
     body.admin_token = undefined;
 
+    body.security = undefined;
+
     return {
       poll: {
         body: body,
