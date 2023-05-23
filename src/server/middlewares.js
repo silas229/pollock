@@ -5,16 +5,17 @@ import Response from "./responses/Response.js";
 import UserResponse from "./responses/UserResponse.js";
 
 // Middleware to check if user is authenticated
-export const isAuthenticated = (req, res, next) => {
+export const isAuthenticated = async (req, res, next) => {
   if (!req.header("Accept") || req.header("Accept") === "application/json") {
     return validateApiKey(req, res, next);
   } else {
     if (req.session && req.session.user) {
+      req.user = await User.getByName(req.session.user);
       // User is authenticated
       next();
     } else {
-      // User is not authenticated, redirect to login page
-      res.redirect("/login");
+      // User is not authenticated, redirect to pollack creation page
+      res.redirect("/poll/lack/create");
     }
   }
 };
