@@ -86,6 +86,25 @@ class User extends Model {
   }
 
   /**
+   *
+   * @param {Poll} poll
+   * @param {User} user Current user
+   *
+   * @returns boolean
+   */
+  canAccessPoll(poll) {
+    if (poll.visibility == "lock") {
+      if (poll.users.length > 0) {
+        if (this.name != poll.owner || !poll.users.includes(this.name)) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
+  /**
    * @param {String} token User token
    * @returns {User}
    */

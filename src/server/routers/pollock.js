@@ -79,6 +79,10 @@ pollRouter.get("/:token", async (req, res) => {
   try {
     const poll = await Poll.getByToken(req.params.token);
 
+    if (!res.locals.user || !res.locals.user.canAccessPoll(poll)) {
+      return res.status(403).json(PollLockResponse.messages[403]);
+    }
+
     if (!poll.is_open) {
       res.status(410).json(PollLockResponse.messages[410]);
       return;
