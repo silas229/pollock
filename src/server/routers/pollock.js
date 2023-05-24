@@ -27,7 +27,11 @@ lock.use("/user", userRouter);
 pollRouter.get("/create", isAuthenticated, PollController.create);
 pollRouter.post("/", isAuthenticated, PollController.store);
 pollRouter.get("/:token", canAccessPoll, PollController.show);
-pollRouter.get("/:token/edit", canChangePoll, PollController.edit);
+pollRouter.get(
+  "/:token/edit",
+  [isAuthenticated, canChangePoll],
+  PollController.edit,
+);
 pollRouter.put("/:token", canChangePoll, PollController.update);
 pollRouter.delete("/:token", canChangePoll, PollController.destroy);
 
