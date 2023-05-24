@@ -81,11 +81,13 @@ export default class PollController extends LackPollController {
         });
         return v;
       });
+      const empty = votes.length === 0;
 
       res.render("poll/show", {
         title: poll.title,
         poll: poll,
         votes: votes,
+        empty: empty,
       });
     } catch (e) {
       console.error(e);

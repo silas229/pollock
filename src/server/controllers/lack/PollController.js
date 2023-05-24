@@ -75,11 +75,13 @@ export default class PollController {
         });
         return v;
       });
+      const empty = votes.length === 0;
 
       res.render("poll/show", {
         title: poll.title,
         poll: poll,
         votes: votes,
+        empty: empty,
       });
     } catch (e) {
       console.error(e);
