@@ -40,5 +40,6 @@ voteRouter.post("/:token", canAccessPoll, VoteController.store);
 voteRouter.get("/:token", canChangeVote, VoteController.show);
 voteRouter.put("/:token", canChangeVote, VoteController.update);
 voteRouter.delete("/:token", canChangeVote, VoteController.destroy);
+voteRouter.post("/:token/delete", canChangeVote, VoteController.destroy);
 
 export default lock;
