@@ -5,6 +5,7 @@ import Poll from "../../models/Poll.js";
 import Validator from "validatorjs";
 import { baseUrl } from "../../main.js";
 import PollResponse from "../../responses/PollResponse.js";
+import PollLockResponse from "../../responses/PollLockResponse.js";
 
 export default class PollController extends LackPollController {
   static async create(req, res) {
@@ -63,6 +64,35 @@ export default class PollController extends LackPollController {
     }
   }
 
+  static async show(req, res) {
+    try {
+      const poll = req.poll;
+
+      if (req.expectsJson) {
+        await PollLockResponse.generate(poll).then((r) => res.json(r));
+        return;
+      }
+
+      let votes = await poll.votes;
+      votes = await votes.map((v) => {
+        v.choice = v.choice.map((c) => {
+          c.text = poll.options.find((o) => o.id === c.id).text;
+          return c;
+        });
+        return v;
+      });
+
+      res.render("poll/lack/show", {
+        title: poll.title,
+        poll: poll,
+        votes: votes,
+      });
+    } catch (e) {
+      console.error(e);
+      res.status(500).json(PollResponse.messages[500]);
+    }
+  }
+
   static async edit(req, res) {
     try {
       const poll = req.poll;
@@ -80,8 +110,21 @@ export default class PollController extends LackPollController {
   static async update(req, res) {
     try {
       req.body.owner = res.locals.user.name;
+      if (req.body.users) {
+        req.body.users = req.body.users.map((u) => u.name);
+      }
+
       let poll = req.poll;
       Object.assign(poll, req.body);
+
+      Validator.register(
+        "poll_number_of_voices",
+        (value) => {
+          return value <= req.body.options.length;
+        },
+        "The number of votes may not be higher than the number of options.",
+      );
+
       const validation = new Validator(poll, Poll.rules);
 
       if (validation.fails()) {
