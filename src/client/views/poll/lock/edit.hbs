@@ -176,7 +176,7 @@
             },
           }).then(async (res) => {
             this.formData = (await res.json()).poll.body;
-            this.formData.setting.deadline = this.formData.setting.deadline.substring(0, 16);
+            this.formData.setting.deadline = this.formData.setting.deadline?.substring(0, 16);
           });
       }
     };
