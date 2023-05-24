@@ -183,6 +183,9 @@
       token: "{{ poll.token }}",
       admin_token: "{{ admin_token }}",
       get link() {
+        return "/poll/lock/" + this.token;
+      },
+      get adminLink() {
         return "/poll/lock/" + this.admin_token;
       },
       result: {
@@ -225,7 +228,7 @@
         });
         this.formData.visibility = this.formData.visibility ? "lock" : "lack";
 
-        await fetch(this.link, {
+        await fetch(this.adminLink, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -237,7 +240,7 @@
         })
       },
       async initForm() {
-        await fetch("/poll/lock/" + this.token,
+        await fetch(this.link,
           {
             headers: {
               "Content-Type": "application/json",
