@@ -76,7 +76,7 @@ export default class PollController {
         return v;
       });
 
-      res.render("poll/lack/show", {
+      res.render("poll/show", {
         title: poll.title,
         poll: poll,
         votes: votes,

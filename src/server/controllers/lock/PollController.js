@@ -82,7 +82,7 @@ export default class PollController extends LackPollController {
         return v;
       });
 
-      res.render("poll/lack/show", {
+      res.render("poll/show", {
         title: poll.title,
         poll: poll,
         votes: votes,
