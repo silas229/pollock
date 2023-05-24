@@ -4,13 +4,12 @@ import session from "express-session";
 import cors from "cors";
 import { xss } from "express-xss-sanitizer";
 import ip from "ip";
+import { baseUrl, port } from "../../app.config.js";
 
 import router from "./routes.js";
 import { checkAcceptsHeader, getUser } from "./middlewares.js";
 
 const app = express();
-export const port = 49725;
-export const baseUrl = "http://" + ip.address() + ":" + port;
 
 app.get(cors());
 app.use(express.static("public"));

@@ -2,7 +2,7 @@
 
 import Poll from "../../models/Poll.js";
 import Validator from "validatorjs";
-import { baseUrl } from "../../main.js";
+import { baseUrl } from "../../../../app.config.js";
 import PollResponse from "../../responses/PollResponse.js";
 
 export default class PollController {

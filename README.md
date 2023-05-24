@@ -2,6 +2,10 @@
 
 ## Quick start
 
+Copy `app.config.example.js` to `app.config.js` and edit the config.
+
+Then run:
+
 ```sh
 npm i -D
 npm build:css

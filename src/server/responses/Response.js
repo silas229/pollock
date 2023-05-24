@@ -1,13 +1,13 @@
+import { baseUrl } from "../../../app.config.js";
+
 export default class Response {
   static generate() {
     return {};
   }
 
   static getLink(token) {
-    return new URL(this.baseUrl + this.base + "/" + token);
+    return new URL(baseUrl + this.base + "/" + token);
   }
-
-  static baseUrl = "http://localhost:49725";
 
   static _base = "";
 
