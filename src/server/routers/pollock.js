@@ -34,6 +34,7 @@ pollRouter.get(
 );
 pollRouter.put("/:token", canChangePoll, PollController.update);
 pollRouter.delete("/:token", canChangePoll, PollController.destroy);
+pollRouter.post("/:token/delete", canChangePoll, PollController.destroy);
 
 voteRouter.post("/:token", canAccessPoll, VoteController.store);
 voteRouter.get("/:token", canChangeVote, VoteController.show);

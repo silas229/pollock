@@ -77,11 +77,17 @@ export default class PollController {
       });
       const empty = votes.length === 0;
 
+      const canChangePoll =
+        res.locals.user &&
+        (res.locals.user.name == poll.owner ||
+          poll.users.includes(res.locals.user.name));
+
       res.render("poll/show", {
         title: poll.title,
         poll: poll,
         votes: votes,
         empty: empty,
+        canChangePoll: canChangePoll,
       });
     } catch (e) {
       console.error(e);

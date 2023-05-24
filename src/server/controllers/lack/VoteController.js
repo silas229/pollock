@@ -11,6 +11,8 @@ export default class VoteController {
 
       if (res.locals.user) {
         req.body.owner = res.locals.user.name;
+      } else if (req.body?.owner?.name) {
+        req.body.owner = req.body.owner.name;
       }
 
       Validator.register(

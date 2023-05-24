@@ -82,12 +82,21 @@ export default class PollController extends LackPollController {
         return v;
       });
       const empty = votes.length === 0;
+      const alreadyVoted = votes
+        .map((v) => v.owner)
+        .includes(res.locals.user?.name);
+
+      const canChangePoll =
+        res.locals.user &&
+        (res.locals.user.name == poll.owner ||
+          poll.users.includes(res.locals.user.name));
 
       res.render("poll/show", {
         title: poll.title,
         poll: poll,
         votes: votes,
         empty: empty,
+        canChangePoll: canChangePoll,
       });
     } catch (e) {
       console.error(e);
