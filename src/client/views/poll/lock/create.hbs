@@ -1,0 +1,186 @@
+<form x-data="pollForm()" x-init="initForm" action="/poll/lock" method="post" class="py-12"
+  @submit.prevent="submitForm">
+  <input type="hidden" name="_method" value="post">
+  <div class="mx-auto mb-6 max-w-7xl sm:px-6 lg:px-8">
+    <div class="overflow-hidden bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
+      <div class="p-6 text-gray-900 dark:text-gray-100">
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300" for="title">
+          Title
+        </label>
+        <input
+          class="block w-full border-gray-300 rounded-md shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-primary-500 dark:focus:border-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600"
+          type="text" x-model="formData.title" id="title" name="title" required="required" autofocus="autofocus">
+        <span class="error" for="title"></span>
+
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300" for="description">
+          Description
+        </label>
+        <textarea
+          class="block w-full border-gray-300 rounded-md shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-primary-500 dark:focus:border-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600"
+          rows="3" x-model="formData.description" id="description" name="description"></textarea>
+        <span class="error" for="description"></span>
+      </div>
+    </div>
+  </div>
+  <div class="mx-auto mb-6 max-w-7xl sm:px-6 lg:px-8">
+    <div class="overflow-hidden bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
+      <div class="p-6 text-gray-900 dark:text-gray-100">
+        <fieldset>
+          <legend>Options</legend>
+          <div x-show="formData.options.length > 0">
+            <ul class="list-disc list-inside">
+              <template x-for="(option, index) in formData.options" :key="index">
+                <li class="p-2">
+                  <input type="hidden" x-model="option.id" name="option[].id" :value="index" required>
+                  <input
+                    class="border-gray-300 rounded-md shadow-sm lg:w-1/2 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-primary-500 dark:focus:border-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600"
+                    type="text" x-model="option.text" name="option[].name" autocomplete="off" required="required">
+                  <button type="button" @click="removeOption(index)" class="btn-circle">
+                    -
+                  </button>
+                </li>
+              </template>
+            </ul>
+            <span class="error" for="options"></span>
+          </div>
+          <button type="button"
+            class="inline-flex items-center px-4 py-2 text-xs font-semibold tracking-widest text-gray-700 uppercase transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm dark:bg-gray-800 dark:border-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25"
+            @click="addOption">
+            Add Option
+          </button>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="mx-auto mb-6 max-w-7xl sm:px-6 lg:px-8">
+    <div class="overflow-hidden bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
+      <div class="p-6 text-gray-900 dark:text-gray-100">
+        <fieldset>
+          <legend>Settings</legend>
+
+          <div class="grid grid-cols-3 gap-2">
+            <div class="">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300" for="setting.voices">
+                Number of voices
+              </label>
+              <input
+                class="block w-full border-gray-300 rounded-md shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-primary-500 dark:focus:border-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600"
+                type="number" x-model="formData.setting.voices" id="setting.voices" name="setting.voices" value="1"
+                min="1">
+              <span class="error" for="setting.voices"></span>
+            </div>
+
+            <div class="">
+              <div class="relative flex gap-x-3">
+                <div class="flex items-center h-6">
+                  <input id="worst" x-model="formData.setting.worst" name="worst" type="checkbox"
+                    class="w-4 h-4 border-gray-300 rounded text-primary-600 focus:ring-primary-600">
+                </div>
+                <div class="text-sm leading-6">
+                  <label for="worst" class="font-medium text-gray-900">Worst?</label>
+                  <p class="text-gray-500">Allow to mark one option as worst</p>
+                </div>
+              </div>
+              <span class="error" for="setting.worst"></span>
+            </div>
+
+            <div class="">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300" for="setting.deadline">
+                Deadline
+              </label>
+              <input
+                class="block w-full border-gray-300 rounded-md shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-primary-500 dark:focus:border-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600"
+                type="datetime-local" x-model="formData.setting.deadline" id="setting.deadline" name="setting.deadline">
+            </div>
+            <span class="error" for="setting.deadline"></span>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+  <div class="mx-auto mb-6 max-w-7xl sm:px-6 lg:px-8">
+    <button type="submit"
+      class="inline-flex items-center px-4 py-2 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-800 border border-transparent rounded-md dark:bg-gray-200 dark:text-gray-800 hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+      Submit
+    </button>
+  </div>
+
+  <div x-show="result.admin.value" class="mx-auto mb-6 max-w-7xl sm:px-6 lg:px-8">
+    <div class="overflow-hidden text-white bg-green-500 shadow-sm dark:bg-green-800 sm:rounded-lg">
+      <div class="p-6">
+        <h3 class="text-lg">Success!</h3>
+        <p>Your poll was created.</p>
+        <a :href="result.share.link"
+          class="inline-flex items-center px-4 py-2 text-xs font-semibold tracking-widest text-gray-700 uppercase transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm dark:bg-gray-800 dark:border-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-25">Show</a>
+        <label class="block text-sm font-medium dark:text-gray-300" for="share-link">
+          Share link
+        </label>
+        <input id="share-link" disabled :value="result.admin.link"
+          class="block w-full p-2 border-gray-300 rounded-md shadow-sm dark:border-gray-700 dark:bg-gray-900 focus:border-primary-500 dark:focus:border-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600">
+        <label class="block text-sm font-medium dark:text-gray-300" for="admin-link">
+          Admin link (to change poll settings)
+        </label>
+        <input id="admin-link" disabled :value="result.share.link"
+          class="block w-full p-2 border-gray-300 rounded-md shadow-sm dark:border-gray-700 dark:bg-gray-900 focus:border-primary-500 dark:focus:border-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600">
+      </div>
+    </div>
+  </div>
+
+</form>
+
+<script>
+  function pollForm() {
+    return {
+      result: {
+        admin: {
+          value: '',
+          link: ''
+        },
+        share: {
+          value: '',
+          link: ''
+        }
+      },
+      formData: {
+        title: '',
+        description: '',
+        options: [],
+        setting: {
+          voices: 1,
+          worst: false,
+          deadline: '',
+        },
+      },
+      addOption() {
+        this.formData.options.push({ id: this.formData.options.length, text: '' });
+      },
+      removeOption(index) {
+        if (this.formData.options.length > 1) {
+          this.formData.options.splice(index, 1);
+        }
+      },
+      async submitForm() {
+        console.log(this.formData);
+        this.formData.options = this.formData.options.map((o, i) => { return { id: i, text: o.text }; });
+
+        await fetch('/poll/lock', {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+          },
+          body: JSON.stringify(this.formData),
+        }).then(async (res) => {
+          this.result = await res.json();
+        })
+      },
+      initForm() {
+        this.addOption();
+        this.addOption();
+        this.addOption();
+      }
+    };
+  }
+</script>
