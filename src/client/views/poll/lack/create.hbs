@@ -60,7 +60,7 @@
         <fieldset>
           <legend>Settings</legend>
 
-          <div class="grid grid-cols-3 gap-2">
+          <div class="grid gap-2 sm:grid-cols-3">
             <div class="">
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300" for="setting.voices">
                 Number of voices
@@ -79,8 +79,10 @@
                     class="w-4 h-4 border-gray-300 rounded text-primary-600 focus:ring-primary-600">
                 </div>
                 <div class="text-sm leading-6">
-                  <label for="worst" class="font-medium text-gray-900">Worst?</label>
-                  <p class="text-gray-500">Allow to mark one option as worst</p>
+                  <label for="worst" class="">
+                    <p class="font-medium text-gray-900">Worst?</p>
+                    <p class="text-gray-500">Allow to mark one option as worst</p>
+                  </label>
                 </div>
               </div>
               <span class="error" for="setting.worst"></span>
