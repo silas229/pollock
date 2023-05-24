@@ -66,11 +66,15 @@ export default class VoteController {
       const vote = req.vote;
 
       if (req.expectsJson) {
-        await vote.response.then((r) => res.json(r));
+        return await vote.response.then((r) => res.json(r));
       }
 
-      // TODO: Send html
-      res.send();
+      const poll = await vote.poll;
+
+      return res.render("vote", {
+        vote: vote,
+        poll: poll,
+      });
     } catch (e) {
       console.error(e);
       res.status(500).json(VoteResponse.messages[500]);

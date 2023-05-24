@@ -157,7 +157,8 @@ class Poll extends Model {
    * @returns {Promise<Poll>}
    */
   static async getByToken(token) {
-    return new Poll(await Poll.db.findOneAsync({ _id: token }));
+    const result = await Poll.db.findOneAsync({ _id: token });
+    return result ? new Poll(result) : null;
   }
 
   /**

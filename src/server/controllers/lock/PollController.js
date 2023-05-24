@@ -82,9 +82,7 @@ export default class PollController extends LackPollController {
         return v;
       });
       const empty = votes.length === 0;
-      const alreadyVoted = votes
-        .map((v) => v.owner)
-        .includes(res.locals.user?.name);
+      const ownVote = votes.find((v) => v.owner === res.locals.user?.name);
 
       const canChangePoll =
         res.locals.user &&
@@ -97,6 +95,7 @@ export default class PollController extends LackPollController {
         votes: votes,
         empty: empty,
         canChangePoll: canChangePoll,
+        vote: ownVote,
       });
     } catch (e) {
       console.error(e);

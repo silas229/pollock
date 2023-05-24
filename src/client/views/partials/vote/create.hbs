@@ -22,14 +22,15 @@
           {{/if}}
           <ul class="block">
             <template x-for="(choice, index) in formData.choice" :key="index">
-              <li class="p-2">
-                <input type="checkbox" x-model="choice.value"
-                  class="w-4 h-4 mr-2 border-gray-300 rounded text-primary-600 focus:ring-primary-600">
-                <label x-text="choice.text">
+              <li class="justify-between p-2">
+                <label>
+                  <input type="checkbox" x-model="choice.value"
+                    class="w-4 h-4 mr-2 border-gray-300 rounded text-primary-600 focus:ring-primary-600">
+                  <span x-text="choice.text"></span>
                 </label>
-                {{#if ../poll.setting.worst}}
-                <input type="radio" name="worst" x-model="choice.worst"
-                  class="float-right w-4 h-4 border-gray-300 text-primary-600 focus:ring-primary-600">
+                {{#if poll.setting.worst}}
+                <input type="radio" name="worst" x-model="choice.worst" :disabled="!choice.value"
+                  class="float-right w-4 h-4 transition-colors border-gray-300 text-primary-600 focus:ring-primary-600 disabled:bg-gray-200 disabled:focus:ring-0">
                 {{/if}}
               </li>
             </template>
@@ -60,6 +61,19 @@
       },
       poll_token: "{{ poll.token }}",
       async submitForm() {
+        this.formData.choice = this.formData.choice.filter((c) => c.value).map((c) => {
+          if (c.worst == "on") {
+            c.worst = true;
+          } else {
+            delete c.worst;
+          }
+
+          delete c.text;
+          delete c.value;
+
+          return c;
+        });
+
         await fetch("/vote/lack/" + this.poll_token, {
           method: "POST",
           headers: {
