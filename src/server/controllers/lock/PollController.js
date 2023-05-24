@@ -7,6 +7,12 @@ import { baseUrl } from "../../main.js";
 import PollResponse from "../../responses/PollResponse.js";
 
 export default class PollController extends LackPollController {
+  static async create(req, res) {
+    res.render("poll/lock/create", {
+      title: "New Poll",
+    });
+  }
+
   static async store(req, res) {
     try {
       req.body.owner = res.locals.user.name;
@@ -54,6 +60,20 @@ export default class PollController extends LackPollController {
     } catch (e) {
       console.log(e);
       res.status(405).json(PollResponse.messages[405]);
+    }
+  }
+
+  static async edit(req, res) {
+    try {
+      const poll = req.poll;
+
+      res.render("poll/lock/edit", {
+        title: "Edit: " + poll.title,
+        admin_token: req.params.token,
+        poll: poll,
+      });
+    } catch (e) {
+      res.status(500).json(PollResponse.messages[500]);
     }
   }
 

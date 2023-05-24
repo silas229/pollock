@@ -24,7 +24,7 @@ lock.use("/user", userRouter);
 
 // Validator.useLang("de");
 
-pollRouter.get("/create", PollController.create);
+pollRouter.get("/create", isAuthenticated, PollController.create);
 pollRouter.post("/", isAuthenticated, PollController.store);
 pollRouter.get("/:token", canAccessPoll, PollController.show);
 pollRouter.get("/:token/edit", canChangePoll, PollController.edit);
