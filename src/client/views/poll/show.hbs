@@ -1,0 +1,124 @@
+<div class="py-12">
+  {{#if canChangePoll }}
+  <div class="flex justify-end gap-2 sm:p-6 lg:p-8">
+    <a href="/poll/lack/{{poll.admin_token}}/edit"
+      class="inline-flex items-center px-4 py-2 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-800 border border-transparent rounded-md dark:bg-gray-200 dark:text-gray-800 hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+      Edit
+    </a>
+    <form action="/poll/lack/{{poll.admin_token}}/delete" method="post">
+      <input type="hidden" name="_method" value="delete">
+      <button type="submit"
+        class="inline-flex items-center px-4 py-2 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-red-800 border border-transparent rounded-md dark:bg-red-200 dark:text-gray-800 hover:bg-red-700 dark:hover:bg-white focus:bg-red-700 dark:focus:bg-white active:bg-red-900 dark:active:bg-red-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+        Delete
+      </button>
+    </form>
+  </div>
+  {{/if}}
+  <div class="mx-auto mb-6 max-w-7xl sm:px-6 lg:px-8">
+    <div class="overflow-hidden bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
+      {{#unless empty}}
+      <div class="p-6 text-gray-900 dark:text-gray-100 md:columns-2">
+        <div class="relative">
+          <canvas id="chart" x-data="chart()" x-init="init"></canvas>
+          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          <script>
+            const ctx = document.getElementById('chart');
+            let darkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+              console.log(event.matches)
+              darkMode = event.matches;
+            });
+
+            const chartOptions = {
+              responsive: true,
+              plugins: {
+                name: {
+                  display: true,
+                  text: 'Results',
+                  font: {
+                    size: 28,
+                  },
+                  color: darkMode ? 'white' : 'black'
+                },
+                tooltip: {
+                  cornerRadius: 0,
+                  displayColors: false,
+                },
+                legend: {
+                  labels: {
+                    color: darkMode ? 'white' : 'black'
+                  }
+                }
+              }
+            };
+
+            //Chart.default.borderColor = darkMode ? 'black' : 'white';
+            //Chart.default.color = darkMode ? 'white' : 'black';
+            //Chart.default.font.family = 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
+
+            function chart() {
+              return {
+                token: "{{ poll.token }}",
+                result: {},
+                async init() {
+                  await fetch("/poll/lack/" + this.token,
+                    {
+                      headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                      },
+                    })
+                    .then(async (res) => {
+                      this.result = await res.json();
+                      return this.result;
+                    })
+                    .then((res) => {
+                      new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                          labels: this.result.poll.body.options.map((o) => o.text),
+                          datasets: [{
+                            label: 'Votes',
+                            data: this.result.options.map((o) => o.voted.length),
+                          }],
+                        },
+                        options: chartOptions,
+                      });
+                    });
+                }
+              }
+            }
+          </script>
+        </div>
+        <div>
+          <h3 class="text-2xl">Votes</h3>
+          <ul class="list-disc list-inside">
+            {{#each votes}}
+            <li class="p-1">{{this.owner}}:
+              {{#each this.choice}}
+              {{#if this.worst}}
+              <span class="text-red-800 underline decoration-dotted" title="Worst">{{this.text}}</span>{{#unless
+              @last}},
+              {{/unless}}
+              {{else}}
+              {{this.text}}{{#unless @last}}, {{/unless}}
+              {{/if}}
+              {{/each}}
+            </li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+      {{else}}
+      <div class="p-6 text-gray-900 dark:text-gray-100 md:columns-2">
+        <h3 class="text-2xl text-center">No Votes yet!</h3>
+      </div>
+      {{/unless}}
+    </div>
+  </div>
+  {{#if alreadyVoted}}
+  {{> vote/edit }}
+  {{else}}
+  {{> vote/create }}
+  {{/if}}
+</div>
