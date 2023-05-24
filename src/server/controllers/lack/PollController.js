@@ -76,6 +76,7 @@ export default class PollController {
         return v;
       });
       const empty = votes.length === 0;
+      const ownVote = votes.find((v) => v.owner === res.locals.user?.name);
 
       const canChangePoll =
         res.locals.user &&
@@ -88,6 +89,7 @@ export default class PollController {
         votes: votes,
         empty: empty,
         canChangePoll: canChangePoll,
+        vote: ownVote,
       });
     } catch (e) {
       console.error(e);
